@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kosaraju Caves: Modular Edition</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+</head>
+<body>
+
+    <div id="phaser-game"></div>
+
+    <div id="ui-layer">
+        <header>
+            <h1>⇋ KOSARAJU CAVES ⇌</h1>
+            <div class="controls">Khám phá: <span>Click Node</span> Ancient Vision: <span>Phím V</span></div>
+        </header>
+
+        <button id="floating-restart" onclick="location.reload()" style="display: none;">🔄 Chơi Map Khác</button>
+
+        <aside id="sidebar">
+            <button id="theme-toggle-btn" class="theme-btn">☀️ BẬT LIGHT MODE</button>
+
+            <div class="panel">
+                <div class="panel-header">EXPEDITION STATS</div>
+                <div class="stat-row">
+                    <span>HP</span><div class="hp-bar"><div id="hp-fill" class="hp-fill"></div><div id="hp-text" class="hp-text">100 / 100</div></div>
+                </div>
+                <div class="stat-row"><span>Node đã đi: <span id="nodes-explored" class="highlight-text">0</span> / <span id="total-nodes">16</span></span></div>
+            </div>
+
+            <div class="panel">
+                <div class="panel-header">INVENTORY & GEAR</div>
+                <div class="grid-inventory">
+                    <div id="inv-vision">👁️ Vision: <span class="locked-text">Locked</span></div>
+                    <div id="inv-key">🗝️ Master Key: <span class="locked-text">No</span></div>
+                    <div id="inv-shield">🛡️ Shield: <span class="locked-text">None</span></div>
+                    <div id="inv-treasure">🏺 Treasure: <span class="locked-text">Chưa mở</span></div>
+                </div>
+            </div>
+
+            <div class="panel log-panel">
+                <div class="panel-header">EXPEDITION LOG</div>
+                <div class="log-box" id="game-log"></div>
+            </div>
+        </aside>
+    </div>
+
+    <div id="tutorial-screen" class="overlay-screen" style="display: flex;">
+        <div class="overlay-box">
+            <h2>📜 HƯỚNG DẪN SINH TỒN</h2>
+            <p>
+                <b>1. Nhiệm Vụ:</b> Tìm <b>🗝️ Master Key</b>, dùng nó mở <b>🏺 Kho báu lấy chiếc Bình cổ</b> ở cuối hang, rồi sống sót quay lại <b>🚪 Entrance</b>.<br><br>
+                <b>2. Luật Đồ Thị:</b> Chỉ đi xuôi chiều mũi tên. Cẩn thận các "Vùng chết" không có đường lui.<br><br>
+                <b>3. Sinh Tồn:</b> Nhặt <b>🧪 Potion</b> hồi máu, <b>🛡️ Shield</b> để đỡ đòn 1 lần. Dùng <b>👁️ Crystal</b> (Phím <b>V</b>) soi đường. Né bẫy gai, lửa, lốc xoáy, sét và kẻ cướp!
+            </p>
+            <button id="btn-start">BẮT ĐẦU THÁM HIỂM</button>
+        </div>
+    </div>
+
+    <div id="death-screen" class="overlay-screen">
+        <div class="overlay-box">
+            <h2 id="death-title" class="danger-text">YOU PERISHED</h2>
+            <p id="death-reason" class="center-large">...</p>
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+                <button onclick="viewMapAfterDeath()">👁️ Xem lại Map</button>
+                <button onclick="location.reload()">🔄 Chơi Map Khác</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="win-screen" class="overlay-screen">
+        <div class="overlay-box">
+            <h2>ESCAPED THE GRAPH</h2>
+            <p class="center-large">Khám phá thành công! Bạn đã mang Kho báu thoát ra ngoài ánh sáng!</p>
+            <button onclick="location.reload()">Chơi Map Khác</button>
+        </div>
+    </div>
+
+    <script src="mapGenerator.js"></script>
+    <script src="ui.js"></script>
+    <script src="game.js"></script>
+</body>
+</html>
