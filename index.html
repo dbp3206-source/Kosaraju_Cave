@@ -3,45 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kosaraju Caves: Modular Edition</title>
+    <title>Kosaraju Caves</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
 </head>
 <body>
-
+    <div id="map-ambience" aria-hidden="true"></div>
     <div id="phaser-game"></div>
 
     <div id="ui-layer">
         <header>
-            <h1>⇋ KOSARAJU CAVES ⇌</h1>
+            <h1 id="game-title" data-symbol="◆">KOSARAJU CAVES</h1>
             <div class="controls">Khám phá: <span>Click Node</span> Ancient Vision: <span>Phím V</span></div>
         </header>
 
-        <button id="floating-restart" onclick="location.reload()" style="display: none;">🔄 Chơi Map Khác</button>
+        <button id="map-select-btn" class="map-select-btn">Đổi Map</button>
 
         <aside id="sidebar">
-            <button id="theme-toggle-btn" class="theme-btn">☀️ BẬT LIGHT MODE</button>
+            <div class="sidebar-crown">
+                <span id="map-theme-name">Map hệ</span>
+                <strong id="map-theme-title">Động Cổ</strong>
+            </div>
+
+            <button id="theme-toggle-btn" class="theme-btn">Đổi ánh sáng</button>
 
             <div class="panel">
-                <div class="panel-header">EXPEDITION STATS</div>
+                <div class="panel-header">Trạng Thái Thám Hiểm</div>
                 <div class="stat-row">
-                    <span>HP</span><div class="hp-bar"><div id="hp-fill" class="hp-fill"></div><div id="hp-text" class="hp-text">100 / 100</div></div>
+                    <span class="heart-mark">♥</span>
+                    <span>HP</span>
+                    <div class="hp-bar">
+                        <div id="hp-fill" class="hp-fill"></div>
+                        <div id="hp-text" class="hp-text">100 / 100</div>
+                    </div>
                 </div>
-                <div class="stat-row"><span>Node đã đi: <span id="nodes-explored" class="highlight-text">0</span> / <span id="total-nodes">16</span></span></div>
+                <div class="stat-row">
+                    <span>Node đã đi: <span id="nodes-explored" class="highlight-text">0</span> / <span id="total-nodes">16</span></span>
+                </div>
             </div>
 
             <div class="panel">
-                <div class="panel-header">INVENTORY & GEAR</div>
+                <div class="panel-header">Túi Đồ & Trang Bị</div>
                 <div class="grid-inventory">
-                    <div id="inv-vision">👁️ Vision: <span class="locked-text">Locked</span></div>
-                    <div id="inv-key">🗝️ Master Key: <span class="locked-text">No</span></div>
-                    <div id="inv-shield">🛡️ Shield: <span class="locked-text">None</span></div>
-                    <div id="inv-treasure">🏺 Treasure: <span class="locked-text">Chưa mở</span></div>
+                    <div id="inv-vision" class="inventory-slot"><span class="slot-icon">◉</span> Vision: <span class="locked-text">Chưa mở</span></div>
+                    <div id="inv-key" class="inventory-slot"><span class="slot-icon">⚿</span> Master Key: <span class="locked-text">Chưa có</span></div>
+                    <div id="inv-shield" class="inventory-slot"><span class="slot-icon">⬟</span> Shield: <span class="locked-text">Không có</span></div>
+                    <div id="inv-treasure" class="inventory-slot"><span class="slot-icon">⚱</span> Relic: <span class="locked-text">Chưa tìm thấy</span></div>
                 </div>
             </div>
 
             <div class="panel log-panel">
-                <div class="panel-header">EXPEDITION LOG</div>
+                <div class="panel-header">Nhật Ký Thám Hiểm</div>
                 <div class="log-box" id="game-log"></div>
             </div>
         </aside>
@@ -49,35 +61,70 @@
 
     <div id="tutorial-screen" class="overlay-screen" style="display: flex;">
         <div class="overlay-box">
-            <h2>📜 HƯỚNG DẪN SINH TỒN</h2>
-            <p>
-                <b>1. Nhiệm Vụ:</b> Tìm <b>🗝️ Master Key</b>, dùng nó mở <b>🏺 Kho báu lấy chiếc Bình cổ</b> ở cuối hang, rồi sống sót quay lại <b>🚪 Entrance</b>.<br><br>
-                <b>2. Luật Đồ Thị:</b> Chỉ đi xuôi chiều mũi tên. Cẩn thận các "Vùng chết" không có đường lui.<br><br>
-                <b>3. Sinh Tồn:</b> Nhặt <b>🧪 Potion</b> hồi máu, <b>🛡️ Shield</b> để đỡ đòn 1 lần. Dùng <b>👁️ Crystal</b> (Phím <b>V</b>) soi đường. Né bẫy gai, lửa, lốc xoáy, sét và kẻ cướp!
+            <span class="overlay-kicker" id="intro-theme-label">Biên niên hang động</span>
+            <div class="intro-visual" aria-hidden="true">
+                <div class="intro-visual-ring"></div>
+                <div class="intro-visual-core">⚱</div>
+                <div class="intro-sigil intro-sigil-metal">⚙</div>
+                <div class="intro-sigil intro-sigil-water">❄</div>
+                <div class="intro-sigil intro-sigil-wood">🌳</div>
+                <div class="intro-sigil intro-sigil-fire">🔥</div>
+                <div class="intro-sigil intro-sigil-earth">⛰</div>
+            </div>
+            <h2>Biên Niên Kosaraju Caves</h2>
+            <p id="story-text" class="story-text">
+                Tương truyền dưới lòng đất cổ xưa tồn tại năm bí cảnh canh giữ cùng một cổ vật thất truyền. Mỗi lối vào của Kosaraju Caves mang một khí mạch khác nhau, và chỉ kẻ dám bước vào đúng nơi mình chọn mới có cơ hội sống sót trở ra.
             </p>
-            <button id="btn-start">BẮT ĐẦU THÁM HIỂM</button>
+            <p class="rule-text">
+                <b>Mục tiêu:</b> chọn một bí cảnh Ngũ Hành, tiến sâu vào mê đồ, tìm <b>Master Key</b>, mở <b>Ancient Relic</b> và quay lại <b>Entrance</b> còn sống.<br>
+                <b>Luật thám hiểm:</b> chỉ đi xuôi theo mũi tên. Khi nắm được <b>Crystal</b>, bạn có thể nhấn <b>V</b> để soi đường rút lui.
+            </p>
+            <button id="btn-start">Chọn Bí Cảnh Khởi Hành</button>
         </div>
     </div>
 
     <div id="death-screen" class="overlay-screen">
         <div class="overlay-box">
-            <h2 id="death-title" class="danger-text">YOU PERISHED</h2>
+            <h2 id="death-title" class="danger-text">BẠN ĐÃ GỤC NGÃ</h2>
             <p id="death-reason" class="center-large">...</p>
-            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
-                <button onclick="viewMapAfterDeath()">👁️ Xem lại Map</button>
-                <button onclick="location.reload()">🔄 Chơi Map Khác</button>
+            <div class="overlay-actions">
+                <button onclick="viewMapAfterDeath()">Xem Lại Map</button>
             </div>
         </div>
     </div>
-    
+
     <div id="win-screen" class="overlay-screen">
         <div class="overlay-box">
-            <h2>ESCAPED THE GRAPH</h2>
-            <p class="center-large">Khám phá thành công! Bạn đã mang Kho báu thoát ra ngoài ánh sáng!</p>
-            <button onclick="location.reload()">Chơi Map Khác</button>
+            <h2>THOÁT KHỎI HANG</h2>
+            <p class="center-large">Khám phá thành công! Bạn đã mang cổ vật thoát ra ngoài ánh sáng.</p>
+            <button onclick="closeWinScreen()">Xem Lại Map</button>
         </div>
     </div>
 
+    <div id="map-select-screen" class="overlay-screen map-select-screen">
+        <div class="overlay-box map-select-box">
+            <span class="overlay-kicker">Ngũ Hành Bí Cảnh</span>
+            <h2>Chọn Map</h2>
+            <div class="map-select-divider" aria-hidden="true"></div>
+            <p class="story-text">Mỗi ấn hiệu mở ra một khí mạch khác nhau của Kosaraju Caves. Chọn bí cảnh bạn muốn bước vào để bắt đầu hành trình.</p>
+            <div class="element-wheel" aria-label="Chọn hệ map">
+                <div class="element-wheel-ring"></div>
+                <button class="element-choice choice-metal" data-map="metal"><span>⚙</span><strong>Kim</strong></button>
+                <button class="element-choice choice-water" data-map="water"><span>❄</span><strong>Thủy</strong></button>
+                <button class="element-choice choice-wood" data-map="wood"><span>☘</span><strong>Mộc</strong></button>
+                <button class="element-choice choice-fire" data-map="fire"><span>🔥</span><strong>Hỏa</strong></button>
+                <button class="element-choice choice-earth" data-map="earth"><span>◆</span><strong>Thổ</strong></button>
+                <div class="wheel-core">
+                    <span class="wheel-core-label">KOSARAJU<br>CAVES</span>
+                </div>
+            </div>
+            <div class="overlay-actions map-select-actions">
+                <button id="close-map-select" class="map-select-back">Quay Lại</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="trap-effect-container" class="trap-effect-container"></div>
     <script src="mapGenerator.js"></script>
     <script src="ui.js"></script>
     <script src="game.js"></script>

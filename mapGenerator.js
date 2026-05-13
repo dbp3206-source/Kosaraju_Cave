@@ -13,10 +13,10 @@ function generateDungeonMap(numNodes = 16) {
 
     for (let i = 0; i < numNodes; i++) {
         let tier = 0;
-        if (i === 0) tier = 0; // Entrance
-        else if (i === 1) tier = 2; // Master Key 
-        else if (i === 2) tier = 3; // Vision
-        else if (i === 3) tier = 4; // Treasure Box
+        if (i === 0) tier = 0;
+        else if (i === 1) tier = 2;
+        else if (i === 2) tier = 3;
+        else if (i === 3) tier = 4;
         else tier = tierPool.pop();
 
         let nodeObj = { id: i, tier: tier, x: 0, y: 0, type: "safe", icon: "", label: `Cave ${i}` };
@@ -45,20 +45,17 @@ function generateDungeonMap(numNodes = 16) {
         });
     }
 
-    nodes[0].type = "entrance"; nodes[0].icon = "🚪"; nodes[0].label = "Entrance";
-    nodes[1].type = "key"; nodes[1].icon = "🗝️"; nodes[1].label = "Master Key";
-    nodes[2].type = "item"; nodes[2].item = "Ancient Vision"; nodes[2].icon = "👁️"; nodes[2].label = "Crystal";
-    nodes[3].type = "treasure";
-    nodes[3].icon = "🏺"; // Dùng bình cổ nhìn cho nó Indiana Jones
-    nodes[3].label = "Ancient Relic";
+    nodes[0].type = "entrance"; nodes[0].icon = "🧙"; nodes[0].label = "Entrance";
+    nodes[1].type = "key"; nodes[1].icon = "⚿"; nodes[1].label = "Master Key";
+    nodes[2].type = "item"; nodes[2].item = "Ancient Vision"; nodes[2].icon = "◆"; nodes[2].label = "Crystal";
+    nodes[3].type = "treasure"; nodes[3].icon = "⚱"; nodes[3].label = "Ancient Relic";
 
-    // Các Bẫy mới được thêm vào
     let trapTypes = [
-        { t: "Spikes", d: 20, i: "⚔️" },
-        { t: "Poison", d: 15, i: "☠️" },
+        { t: "Spikes", d: 20, i: "⚔" },
+        { t: "Poison", d: 15, i: "☠" },
         { t: "Fire", d: 35, i: "🔥" },
-        { t: "Bandit", d: 25, i: "🥷" },
-        { t: "Tornado", d: 30, i: "🌪️" },
+        { t: "Bandit", d: 25, i: "♞" },
+        { t: "Tornado", d: 30, i: "◌" },
         { t: "Lightning", d: 40, i: "⚡" }
     ];
 
@@ -68,13 +65,12 @@ function generateDungeonMap(numNodes = 16) {
             let tr = trapTypes[Math.floor(Math.random() * trapTypes.length)];
             nodes[i].type = "trap"; nodes[i].damage = tr.d; nodes[i].icon = tr.i; nodes[i].label = tr.t;
         } else if (rand < 0.55) {
-            nodes[i].type = "potion"; nodes[i].icon = "🧪"; nodes[i].label = "Potion";
+            nodes[i].type = "potion"; nodes[i].icon = "✚"; nodes[i].label = "Potion";
         } else if (rand < 0.65) {
-            nodes[i].type = "shield"; nodes[i].icon = "🛡️"; nodes[i].label = "Shield";
+            nodes[i].type = "shield"; nodes[i].icon = "⬟"; nodes[i].label = "Shield";
         }
     }
 
-    // ĐẢM BẢO GOLDEN PATH: Entrance -> Key -> Treasure -> Entrance
     let t1_node = nodePerTier[1][Math.floor(Math.random() * nodePerTier[1].length)].id;
     edges.push({ from: 0, to: t1_node });
     edges.push({ from: t1_node, to: 1 });
@@ -91,7 +87,6 @@ function generateDungeonMap(numNodes = 16) {
     edges.push({ from: bwd_t2, to: bwd_t1 });
     edges.push({ from: bwd_t1, to: 0 });
 
-    // Cạnh nhiễu
     for (let t = 0; t < tiers - 1; t++) {
         let current = nodePerTier[t], next = nodePerTier[t + 1];
         if (current.length > 0 && next.length > 0) {
