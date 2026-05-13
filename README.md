@@ -2,7 +2,6 @@
 
 **Kosaraju Caves** là một minigame thám hiểm mê cung dựa trên lý thuyết đồ thị và hệ thống **Ngũ Hành** (Kim, Mộc, Thủy, Hỏa, Thổ). Người chơi sẽ bước vào những hang động cổ xưa, đối mặt với bẫy rập và tìm kiếm cổ vật thất truyền.
 
-![Preview](bg_fire.png) *(Hình ảnh minh họa hệ Hỏa)*
 
 ## 🌟 Tính Năng Nổi Bật
 
