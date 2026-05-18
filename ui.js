@@ -3,39 +3,39 @@ let isLightMode = false;
 
 const ELEMENT_THEMES = [
     {
-        id: "metal", name: "Kim", title: "Thiết Mạch Cổ Thành", primary: "#d8d9d4", secondary: "#ffd700",
+        id: "metal", name: "Kim", title: "Thiết Giáp Cổ Thành", primary: "#d8d9d4", secondary: "#ffd700",
         symbol: "⚙", edge: 0xffd700, reverseEdge: 0xaee7ff, safe: 0x9aa0a6, trap: 0x6f7781, item: 0xffd700,
-        story: "Vòm hang mở vào một thành quách bằng sắt nguội. Tiếng bánh răng cổ vang lên dưới nền đá, như thể cả bản đồ đang chờ người đủ gan bước tới."
+        story: "Năm 849 SCN, thuật sĩ Khải Nguyên đặt 23 bẫy cơ khí bằng thiên thạch sắt bên trong. Đội thám hiểm đầu tiên năm 1923 mất 4 trong 7 thành viên. Chưa ai lấy được Kim Ấn. Đến lượt Trần Minh Khải."
     },
     {
-        id: "wood", name: "Mộc", title: "Lâm Động Rễ Sâu", primary: "#72b66f", secondary: "#c48a42",
+        id: "wood", name: "Mộc", title: "Lâm Căn U Đạo", primary: "#72b66f", secondary: "#c48a42",
         symbol: "🌳", edge: 0xcfa45b, reverseEdge: 0x72d987, safe: 0x4e7c48, trap: 0x3f2e19, item: 0x72d987,
-        story: "Rễ cây già quấn quanh miệng hang, kéo hơi thở của rừng xuống tận lòng đất."
+        story: "Rễ cây sống xuyên qua toàn bộ mê cung — ước tính dài 840 m. Năm 1987, nhà khoa học Liên Xô ghi nhận rễ vẫn còn lớn 2 mm mỗi năm. Mộc Ấn nằm ở tầng sâu nhất, nơi ánh sáng chưa bao giờ chạm tới."
     },
     {
-        id: "water", name: "Thủy", title: "Băng Tuyết U Cốc", primary: "#9ee7ff", secondary: "#1aa4c8",
+        id: "water", name: "Thủy", title: "Băng Huyệt Hàn Cung", primary: "#9ee7ff", secondary: "#1aa4c8",
         symbol: "❄", edge: 0x9ee7ff, reverseEdge: 0xffffff, safe: 0x2f7289, trap: 0x1b3242, item: 0xbef4ff,
-        story: "Tuyết lạnh quất qua lòng hang, phủ lên bản đồ một màn trắng mỏng và sắc."
+        story: "Nhiệt độ trung bình trong hang: âm 8°C. Khải Nguyên dẫn nước từ 4 con sông tạo mê cung băng năm 847. Mỗi 100 năm, băng dày thêm 3 cm. Sau 1.177 năm — mọi con đường cũ đã biến mất."
     },
     {
         id: "fire", name: "Hỏa", title: "Hỏa Long Hắc Động", primary: "#ffbd66", secondary: "#8b0000",
         symbol: "🔥", edge: 0xffbd66, reverseEdge: 0xff5a3d, safe: 0x8b2f18, trap: 0xb10f0f, item: 0xffd166,
-        story: "Nham thạch đỏ rực cháy trong khe đá như mạch máu của hang sâu."
+        story: "Núi lửa ngầm duy trì nhiệt độ 847°C tại lõi hang — trùng với năm vương triều sụp đổ. Trần cao 14 m, đủ để một con rồng đứng thẳng. Hỏa Ấn là mảnh phong ấn nguy hiểm nhất trong năm."
     },
     {
         id: "earth", name: "Thổ", title: "Huyền Thổ Mộ Đạo", primary: "#c49b62", secondary: "#5f432c",
         symbol: "⛰", edge: 0xc49b62, reverseEdge: 0xe0c085, safe: 0x6f5638, trap: 0x3b2b1f, item: 0xd5a76b,
-        story: "Đất đen ép xuống từ bốn phía, để lộ những đường khắc nâu sẫm trên nền cổ mộ."
+        story: "Xây trên nền nghĩa địa vương triều Hoa Lam. 847 quan tài đá được đặt làm vật cản. Radar năm 1999 phát hiện 23 tầng hầm chưa được khám phá. Thổ Ấn nằm ở tầng cuối cùng."
     }
 ];
 
-// Victory items per element
+// Victory items per element — 5 mảnh Ngũ Hành Phong Ấn
 const VICTORY_ITEMS = {
-    metal: { name: "Lõi Kim Loại Bí Ẩn", icon: "victory_item_metal.png", desc: "Một lõi hình học vàng bạc phát ra các tia sáng sắc nét.", cssClass: "vitem-metal", color: "#ffd700" },
-    wood:  { name: "Hạt Giống Sinh Mệnh", icon: "victory_item_wood.png", desc: "Một hạt giống ngọc bích tỏa ra những chiếc lá phát sáng huyền bí.", cssClass: "vitem-wood",  color: "#72d987" },
-    water: { name: "Giọt Nước Vĩnh Cửu", icon: "victory_item_water.png", desc: "Một viên hổ phách xanh hình giọt nước tỏa ra hào quang bình yên.", cssClass: "vitem-water", color: "#9ee7ff" },
-    fire:  { name: "Nanh Hỏa Long",       icon: "victory_item_fire.png", desc: "Một chiếc nanh đen tuyền của hỏa long đang bốc cháy vĩnh cửu.",  cssClass: "vitem-fire",  color: "#ff4500" },
-    earth: { name: "Tinh Thể Hạt Nhân Đất", icon: "victory_item_earth.png", desc: "Một tinh thể hổ phách thô phát sáng với những mảnh đá nhỏ quay quanh.", cssClass: "vitem-earth", color: "#c49b62" }
+    metal: { name: "Kim Ấn Thiết Kiếm", icon: "victory_item_metal.png", desc: "Mảnh phong ấn hình lưỡi kiếm đúc từ thiên thạch rơi năm 831 SCN. Nặng 4,7 kg, dài 28 cm. Khắc 137 ký tự cổ ngữ Hoa Lam chưa ai dịch được ngoài Trần Minh Khải.", cssClass: "vitem-metal", color: "#ffd700" },
+    wood:  { name: "Mộc Ấn Căn Cổ",    icon: "victory_item_wood.png",  desc: "Rễ cây Thiên Tuế 2.000 năm tuổi hóa đá nhưng vẫn còn ấm khi chạm vào. Dài 41 cm, nặng 1,2 kg. Khải Nguyên nói: 'Nó vẫn đang sống.'", cssClass: "vitem-wood",  color: "#72d987" },
+    water: { name: "Thủy Ấn Băng Lệ",   icon: "victory_item_water.png", desc: "Viên đá băng từ đỉnh Hàn Cực Sơn — không tan sau 1.177 năm. Nhiệt độ bề mặt âm 3°C. Đường kính 18 cm. Khi Khải cầm lên, cả hang rung nhẹ.", cssClass: "vitem-water", color: "#9ee7ff" },
+    fire:  { name: "Hỏa Ấn Long Nha",   icon: "victory_item_fire.png",  desc: "Nanh rồng hỏa dài 33 cm, nhiệt độ lõi 847°C sau 12 thế kỷ. Bốc cháy liên tục mà không tiêu hao. Theo sách cổ: nanh này từng xé toác bầu trời đêm năm 743 SCN.", cssClass: "vitem-fire",  color: "#ff4500" },
+    earth: { name: "Thổ Ấn Huyền Thạch", icon: "victory_item_earth.png", desc: "Khối đá huyền bí nặng 9,3 kg, màu đen tuyền, không phản chiếu ánh sáng. Theo Kosaraju Toàn Thư: 'Ai nâng được hòn đá này, trời đất sẽ run.' Khải đã nâng được.", cssClass: "vitem-earth", color: "#c49b62" }
 };
 
 // ── Theme selection ───────────────────────────────────────────────────────────
@@ -93,8 +93,18 @@ function triggerUltimateWin() {
     const overlay = document.getElementById("ultimate-win-screen");
     const fwCanvas = document.getElementById("fireworks-canvas");
     if (overlay) overlay.style.display = "flex";
-    if (fwCanvas && typeof triggerUltimateFireworks === "function") {
-        triggerUltimateFireworks(fwCanvas, 6000);
+    if (fwCanvas) {
+        // Step 1: Dragon transform animation
+        if (typeof triggerDragonTransform === "function") {
+            triggerDragonTransform(fwCanvas, () => {
+                // Step 2: After dragon, run fireworks
+                if (typeof triggerUltimateFireworks === "function") {
+                    triggerUltimateFireworks(fwCanvas, 6000);
+                }
+            });
+        } else if (typeof triggerUltimateFireworks === "function") {
+            triggerUltimateFireworks(fwCanvas, 6000);
+        }
     }
 }
 
@@ -103,9 +113,9 @@ function applyThemeText() {
     const theme = window.currentElementTheme;
     const gameTitle = document.getElementById("game-title");
     if (gameTitle) gameTitle.dataset.symbol = theme.symbol;
-    document.getElementById("map-theme-name").innerText = `Map hệ ${theme.name}`;
+    document.getElementById("map-theme-name").innerText = `Bí cảnh hệ ${theme.name}`;
     document.getElementById("map-theme-title").innerText = theme.title;
-    document.getElementById("intro-theme-label").innerText = `Biên niên hang động — Hệ ${theme.name}`;
+    document.getElementById("intro-theme-label").innerText = `Ngũ Hành Phong Ấn — Hệ ${theme.name}`;
     const storyEl = document.getElementById("story-text");
     if (storyEl && theme.story) storyEl.innerText = theme.story;
 }
@@ -250,7 +260,7 @@ function updateUI() {
             : `<span class="slot-icon">⬟</span> Shield: <span class="locked-text">Không có</span>`);
 
     if (gameState.hp <= 0 && !gameState.isDead) {
-        triggerGameOver("Bạn đã gục ngã vì kiệt sức và mất máu.");
+        triggerGameOver("Trần Minh Khải gục xuống. Máu loang trên nền đá cổ. Hành trình 1.177 năm chờ đợi kết thúc tại đây.");
     }
 }
 
@@ -369,7 +379,7 @@ document.querySelectorAll(".element-choice").forEach(button => {
 const resetBtn = document.getElementById("reset-trophies-btn");
 if (resetBtn) {
     resetBtn.addEventListener("click", () => {
-        if (confirm("Xóa toàn bộ chiến tích?")) {
+        if (confirm("Xóa toàn bộ Phong Ấn đã thu thập? Thiên Long Hồn sẽ tiếp tục bị phong ấn!")) {
             localStorage.removeItem("kosaraju-trophies");
             window.trophyState = {};
             renderTrophyBar();
@@ -381,7 +391,7 @@ if (resetBtn) {
 const uwClose = document.getElementById("ultimate-win-close");
 if (uwClose) {
     uwClose.addEventListener("click", () => {
-        if (!confirm("Bạn có chắc muốn bắt đầu lại? Toàn bộ chiến tích sẽ bị xóa!")) return;
+        if (!confirm("Bắt đầu lại hành trình? 5 mảnh Phong Ấn đã thu thập sẽ mất — Thiên Long Hồn sẽ lại bị phong ấn thêm 1.177 năm nữa!")) return;
         document.getElementById("ultimate-win-screen").style.display = "none";
         localStorage.removeItem("kosaraju-trophies");
         window.trophyState = {};
@@ -391,5 +401,37 @@ if (uwClose) {
 
 if (shouldSkipIntro) {
     document.getElementById("tutorial-screen").style.display = "none";
-    addLog("Cổng ngục tối đã mở. Hãy cẩn thận từng bước đi!", "log-system");
+    addLog("Trần Minh Khải bước vào. Cánh đá khép lại phía sau — không có đường rút.", "log-system");
+}
+
+// -- Algorithm Pop-up Logic --
+const algoPopup = document.getElementById("algo-popup");
+const hideAlgoCb = document.getElementById("hide-algo-cb");
+
+if (algoPopup && hideAlgoCb) {
+    if (localStorage.getItem("kosaraju-hide-algo-popup") === "true") {
+        algoPopup.style.display = "none";
+        hideAlgoCb.checked = true;
+    }
+    
+    hideAlgoCb.addEventListener("change", (e) => {
+        localStorage.setItem("kosaraju-hide-algo-popup", e.target.checked);
+        if (e.target.checked) {
+            // Optional: fade it out or hide immediately
+            algoPopup.style.opacity = "0.5";
+            algoPopup.style.pointerEvents = "none";
+            setTimeout(() => { algoPopup.style.display = "none"; }, 400);
+        }
+    });
+}
+
+const btnShowAlgo = document.getElementById("btn-show-algo");
+if (btnShowAlgo && algoPopup && hideAlgoCb) {
+    btnShowAlgo.addEventListener("click", () => {
+        algoPopup.style.display = "flex";
+        algoPopup.style.opacity = "1";
+        algoPopup.style.pointerEvents = "auto";
+        hideAlgoCb.checked = false;
+        localStorage.setItem("kosaraju-hide-algo-popup", "false");
+    });
 }

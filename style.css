@@ -14,9 +14,9 @@
     --theme-dark: #101011;
     --theme-glow: rgba(255, 215, 0, 0.42);
     --theme-wash: rgba(0, 128, 128, 0.14);
-    --font-title: "Cinzel", "Times New Roman", Georgia, serif;
-    --font-display: "Cinzel", "Times New Roman", Georgia, serif;
-    --font-body: "Inter", "Segoe UI", system-ui, sans-serif;
+    --font-title: "Times New Roman", Times, serif;
+    --font-display: "Times New Roman", Times, serif;
+    --font-body: "Times New Roman", Times, serif;
 }
 
 body[data-element="metal"] {
@@ -945,6 +945,21 @@ h1::after {
         radial-gradient(circle at 50% 0%, var(--theme-wash), transparent 44%),
         rgba(6, 8, 10, 0.95);
     box-shadow: 0 0 58px rgba(0, 0, 0, 0.72), 0 0 28px var(--theme-glow), inset 0 0 36px rgba(0, 0, 0, 0.5);
+    position: relative;
+    z-index: 1;
+}
+
+.overlay-box::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 10px;
+    background: linear-gradient(60deg, var(--theme-primary, #ffd700), transparent 30%, #ff8c00, transparent 70%, var(--theme-primary, #ffd700));
+    background-size: 200% 200%;
+    z-index: -1;
+    animation: algoBorderGlow 3.5s ease-in-out infinite;
+    opacity: 0.9;
+    filter: blur(2px);
 }
 
 .overlay-kicker {
@@ -2112,3 +2127,120 @@ body[data-element="wood"] h1::after {
 .ultimate-trophies img:nth-child(3) { animation-delay: -4s; }
 .ultimate-trophies img:nth-child(4) { animation-delay: -6s; }
 .ultimate-trophies img:nth-child(5) { animation-delay: -8s; }
+
+/* ── Dragon Icon — Ultimate Win Screen ── */
+.ultimate-dragon-icon {
+    font-size: 90px;
+    display: block;
+    margin: 0 auto 8px;
+    line-height: 1;
+    animation:
+        dragonRise 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) both,
+        dragonGlow 2.2s ease-in-out 1.4s infinite alternate;
+    transform-origin: center bottom;
+    filter: drop-shadow(0 0 28px #ff4500) drop-shadow(0 0 56px #ffd700);
+}
+
+@keyframes dragonRise {
+    0%   { opacity: 0; transform: scale(0.15) translateY(70px) rotate(-25deg); }
+    55%  { opacity: 1; transform: scale(1.22) translateY(-14px) rotate(6deg); }
+    78%  { transform: scale(0.96) translateY(4px) rotate(-2deg); }
+    100% { opacity: 1; transform: scale(1) translateY(0) rotate(0deg); }
+}
+
+@keyframes dragonGlow {
+    0%   { filter: drop-shadow(0 0 20px #ff4500) drop-shadow(0 0 42px #ff0000); }
+    50%  { filter: drop-shadow(0 0 36px #ff8800) drop-shadow(0 0 70px #ffd700); }
+    100% { filter: drop-shadow(0 0 48px #ffd700) drop-shadow(0 0 90px #ff6600); }
+}
+
+
+
+/* -- Algorithm Explanation Note -- */
+.algo-note {
+    font-size: 0.88rem;
+    color: #a4e5f9;
+    background: rgba(0, 75, 85, 0.45);
+    border-left: 3px solid #00bcd4;
+    padding: 12px 14px;
+    margin: 12px 0;
+    text-align: left;
+    line-height: 1.5;
+    border-radius: 4px;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    font-family: var(--font-body);
+}
+.algo-note b {
+    color: #fff;
+    font-weight: 600;
+}
+.algo-note i {
+    color: #ffda75;
+}
+
+/* -- Algorithm Pop-up Panel -- */
+.algo-popup {
+    width: min(290px, 100vw - 48px);
+    background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.05), transparent 36%),
+        radial-gradient(circle at 50% 0%, rgba(0, 150, 180, 0.15), transparent 44%),
+        rgba(6, 8, 10, 0.95);
+    border: 1px solid #00bcd4;
+    border-radius: 8px;
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: #e0f7fa;
+    font-size: 0.85rem;
+    line-height: 1.45;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.72), inset 0 0 15px rgba(0, 188, 212, 0.15);
+}
+
+@keyframes algoBorderGlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.algo-title {
+    margin: 0 0 14px 0;
+    color: #4dd0e1;
+    font-family: var(--font-title);
+    font-size: 1.15rem;
+    border-bottom: 1px solid rgba(0, 188, 212, 0.3);
+    padding-bottom: 8px;
+    text-shadow: 0 0 8px rgba(0, 188, 212, 0.5);
+}
+
+.algo-content p {
+    margin-bottom: 12px;
+}
+.algo-content b {
+    color: #fff;
+    font-weight: 600;
+}
+.algo-content i {
+    color: #ffeb3b;
+}
+
+.algo-footer {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px dashed rgba(0, 188, 212, 0.2);
+    font-size: 0.85rem;
+}
+
+.algo-checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: #b2ebf2;
+    transition: color 0.2s;
+}
+.algo-checkbox-label:hover {
+    color: #fff;
+}
+
+

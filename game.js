@@ -89,7 +89,12 @@ class GameScene extends Phaser.Scene {
         this.input.keyboard.on("keydown-V", () => {
             if (gameState.inventory["Ancient Vision"] && !gameState.isDead) {
                 gameState.visionMode = !gameState.visionMode;
-                addLog(gameState.visionMode ? "Ancient Vision kích hoạt! Các đường rút lui đã hiện ra." : "Tắt Ancient Vision.", "log-system");
+                addLog(
+                    gameState.visionMode
+                        ? "⚡ Khải giở Kosaraju Toàn Thư — Trận pháp giải mã! Đồ thị hóa VÔ HƯỚNG, mọi hướng đều đi được!"
+                        : "📜 Đóng Toàn Thư. Trận pháp phục hồi — chỉ đi xuôi theo mũi tên.",
+                    "log-system"
+                );
                 this.drawEdges();
             }
         });
@@ -121,15 +126,29 @@ class GameScene extends Phaser.Scene {
             const from = levelData.nodes.find(n => n.id === edge.from);
             const to = levelData.nodes.find(n => n.id === edge.to);
             const fwColor = isLightMode ? hexToNumber(getTheme().primary) : getTheme().edge;
-            this.drawSingleEdge(this.graphicsLayer, from, to, fwColor, false);
-            if (gameState.visionMode) this.drawSingleEdge(this.reverseGraphicsLayer, to, from, getTheme().reverseEdge, true);
+            this.drawSingleEdge(this.graphicsLayer, from, to, fwColor, false, gameState.visionMode ? 4 : 0);
+            if (gameState.visionMode) this.drawSingleEdge(this.reverseGraphicsLayer, to, from, getTheme().reverseEdge, true, 4);
         });
     }
 
-    drawSingleEdge(graphics, from, to, color, isDashed) {
+    drawSingleEdge(graphics, from, to, color, isDashed, offset = 0) {
         const fromPos = this.getNodeScreenPosition(from);
         const toPos = this.getNodeScreenPosition(to);
-        const x1=fromPos.x, y1=fromPos.y, x2=toPos.x, y2=toPos.y;
+        let x1=fromPos.x, y1=fromPos.y, x2=toPos.x, y2=toPos.y;
+
+        if (offset !== 0) {
+            const dx = x2 - x1;
+            const dy = y2 - y1;
+            const len = Math.sqrt(dx*dx + dy*dy);
+            if (len > 0) {
+                const nx = -dy / len;
+                const ny = dx / len;
+                x1 += nx * offset;
+                y1 += ny * offset;
+                x2 += nx * offset;
+                y2 += ny * offset;
+            }
+        }
 
         if (isDashed) {
             // Enhanced Vision Mode Edge (Escape Route)
@@ -266,10 +285,14 @@ class GameScene extends Phaser.Scene {
 
         let isValidPath = levelData.edges.some(e => e.from === gameState.currentNode && e.to === targetNode.id);
         if (!isValidPath && gameState.visionMode) {
-            isValidPath = levelData.edges.some(e => e.to === gameState.currentNode && e.from === targetNode.id);
+            // Vision Mode: đồ thị vô hướng — đi được cả chiều ngược
+            isValidPath = levelData.edges.some(e => e.from === targetNode.id && e.to === gameState.currentNode);
         }
         if (!isValidPath) {
-            addLog("Tường đá chắn ngang! Bạn chỉ có thể đi xuôi theo chiều mũi tên.", "log-danger");
+            const msg = gameState.visionMode
+                ? "Không có cạnh nối. Hai buồng hầm này không liên kết với nhau."
+                : "Đường hầm bị chặn! Trận pháp chỉ cho phép một chiều. Tìm Toàn Thư (V) để đi ngược.";
+            addLog(msg, "log-danger");
             this.cameras.main.shake(150, 0.005);
             return;
         }
@@ -294,25 +317,25 @@ class GameScene extends Phaser.Scene {
                 triggerVictorySequence(window.currentElementTheme.id);
                 return;
             }
-            addLog("Chưa lấy được Ancient Relic. Đừng quay về tay không.", "log-system");
+            addLog("⚛️ Khải đứng tại cửa hang. Tay không. Chưa tìm được Phong Ấn — không thể rut lui!", "log-system");
 
         } else if (node.type === "magic_door") {
             const destId = node.linkedDoor;
             const destNode = levelData.nodes.find(n => n.id === destId);
             if (destNode) {
-                addLog("✨ Cánh Cửa Thần Kì! Bạn bị hút vào chiều không gian khác...", "log-system");
+                addLog("✨ Cổng Chên Không! Một cơ chế trong trận pháp Kosaraju — Khải bị hút sang buồng khác...", "log-system");
                 gameState.isMoving = true; // lock input during warp
                 triggerWarpVFX(() => {
                     gameState.currentNode = destNode.id;
                     gameState.visitedNodes.add(destNode.id);
                     const destPos = this.getNodeScreenPosition(destNode);
                     this.playerMarker.setPosition(destPos.x, destPos.y - 2);
-                    addLog(`Bạn xuất hiện tại: ${destNode.label} (Node ${destNode.id})`, "log-system");
+                    addLog(`Khải xuất hiện tại: ${destNode.label} (Buồng ${destNode.id})`, "log-system");
                     gameState.isMoving = false;
                     updateUI();
                     if (gameState.hp > 0 && destNode.id !== 0 && !gameState.isDead) {
-                        if (!canReachEntrance(destNode.id)) {
-                            triggerGameOver("Cổng thần kì đã đưa bạn vào ngõ cụt không lối thoát!");
+                        if (!canCompleteGame(destNode.id)) {
+                            triggerDeadEndGameOver(destNode.id);
                         }
                     }
                 });
@@ -322,32 +345,32 @@ class GameScene extends Phaser.Scene {
         } else if (node.type === "treasure") {
             if (gameState.inventory["Master Key"]) {
                 gameState.inventory["Treasure"] = true;
-                addLog("Bạn đã tìm thấy cổ vật ngàn năm! Mau chóng thoát khỏi hang động.", "log-success");
+                addLog("🏺 Phong Ấn rung chuyển khi Khải chạm vào! Rương mở ra — mảnh Phong Ấn nằm trong tay. Mau thoát ra!", "log-success");
                 node.type = "safe";
                 this.texts[`ico_${node.id}`].setText("");
                 this.cameras.main.flash(500, 203, 160, 82);
             } else {
-                addLog("Rương bị khóa chặt! Cần tìm Master Key trước.", "log-danger");
+                addLog("🔒 Rương Phong Ấn bị khóa bằng cơ chế cổ xưa! Cần tìm Khóa Cổ Đạo trước.", "log-danger");
             }
 
         } else if (node.type === "trap") {
             if (gameState.inventory["Shield"]) {
                 gameState.inventory["Shield"] = false;
-                addLog(`Dẫm phải ${node.label}, nhưng khiên đã đỡ đòn và vỡ nát.`, "log-system");
+                addLog(`🛡️ Dẫm phải bẫy ${node.label}, nhưng Hộ Pháp che đỡ và tan vỡ!`, "log-system");
                 this.cameras.main.shake(150, 0.01);
                 triggerTrapEffect(node.label);
             } else {
                 gameState.hp -= node.damage;
-                addLog(`BẪY! ${node.label} gây ${node.damage} sát thương!`, "log-danger");
+                addLog(`⚠️ Bẫy! ${node.label} của trận pháp Kosaraju gây ${node.damage} sát thương!`, "log-danger");
                 this.cameras.main.shake(250, 0.02);
                 triggerTrapEffect(node.label);
                 // Floating damage text
-                if (typeof spawnFloatingText === "function") spawnFloatingText(`-${node.damage} HP`, "#e74c3c");
+                if (typeof spawnFloatingText === "function") spawnFloatingText(`-${node.damage} sinh lực`, "#e74c3c");
             }
 
         } else if (node.type === "shield") {
             gameState.inventory["Shield"] = true;
-            addLog("Nhặt được Shield. Nó sẽ bảo vệ bạn khỏi một bẫy bất kỳ.", "log-success");
+            addLog("🛡️ Khải tìm thấy Hộ Pháp của vệ binh cũ. Nó sẽ che chở một đòn bẫy bất kỳ.", "log-success");
             node.type = "safe";
             this.setNodeToSafe(node.id);
             triggerPickupVFX("shield");
@@ -355,7 +378,7 @@ class GameScene extends Phaser.Scene {
         } else if (node.type === "potion") {
             const heal = 25;
             gameState.hp = Math.min(gameState.maxHp, gameState.hp + heal);
-            addLog(`Tìm thấy Potion, hồi ${heal} HP.`, "log-success");
+            addLog(`💉 Khải tìm thấy bình thuốc của đội thám hiểm 1923. Hồi ${heal} sinh lực.`, "log-success");
             node.type = "safe";
             this.setNodeToSafe(node.id);
             triggerPickupVFX("heal");
@@ -363,27 +386,27 @@ class GameScene extends Phaser.Scene {
 
         } else if (node.type === "key") {
             gameState.inventory["Master Key"] = true;
-            addLog("Đã lấy Master Key. Bây giờ hãy tìm Ancient Relic.", "log-success");
+            addLog("🔑 Khải tìm thấy Khóa Cổ Đạo! Kim loại nguyên chất 1.177 năm không gỉ. Bây giờ hãy tìm Rương Phong Ấn.", "log-success");
             node.type = "safe";
             this.setNodeToSafe(node.id);
             triggerPickupVFX("key");
 
         } else if (node.type === "item") {
             gameState.inventory[node.item] = true;
-            addLog(`Đã có ${node.item}. Bấm V để soi các đường lui.`, "log-success");
+            addLog(`📜 Khải tìm thấy Kosaraju Toàn Thư — cuốn sách 1.200 năm tuổi! Bấm V để giải mã trận pháp.`, "log-success");
             node.type = "safe";
             this.setNodeToSafe(node.id);
             triggerPickupVFX("crystal");
 
         } else {
-            addLog(`Tiến vào: ${node.label}`);
+            addLog(`Khải tiến vào: ${node.label}`);
         }
 
         updateUI();
 
         if (gameState.hp > 0 && node.id !== 0 && !gameState.isDead) {
-            if (!canReachEntrance(node.id)) {
-                triggerGameOver("Cửa sập lại... Bạn đã lạc vào nhánh cụt không lối thoát. Bị kẹt vĩnh viễn!");
+            if (!canCompleteGame(node.id)) {
+                triggerDeadEndGameOver(node.id);
             }
         }
     }

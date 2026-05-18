@@ -27,7 +27,7 @@
             <div class="controls">Khám phá: <span>Click Node</span> Ancient Vision: <span>Phím V</span></div>
             <!-- Trophy Bar -->
             <div id="trophy-bar-wrap">
-                <span class="trophy-bar-label">Kho chiến tích</span>
+                <span class="trophy-bar-label">Kho Phong Ấn</span>
                 <div id="trophy-bar"></div>
                 <button id="reset-trophies-btn" title="Xóa chiến tích">↺</button>
             </div>
@@ -61,24 +61,24 @@
             <div class="panel">
                 <div class="panel-header">Túi Đồ &amp; Trang Bị</div>
                 <div class="grid-inventory">
-                    <div id="inv-vision" class="inventory-slot"><span class="slot-icon">◉</span> Vision: <span class="locked-text">Chưa mở</span></div>
-                    <div id="inv-key" class="inventory-slot"><span class="slot-icon">⚿</span> Master Key: <span class="locked-text">Chưa có</span></div>
-                    <div id="inv-shield" class="inventory-slot"><span class="slot-icon">⬟</span> Shield: <span class="locked-text">Không có</span></div>
-                    <div id="inv-treasure" class="inventory-slot"><span class="slot-icon">⚱</span> Relic: <span class="locked-text">Chưa tìm thấy</span></div>
+                    <div id="inv-vision" class="inventory-slot"><span class="slot-icon">◉</span> Toàn Thư: <span class="locked-text">Chưa khám phá</span></div>
+                    <div id="inv-key" class="inventory-slot"><span class="slot-icon">⨿</span> Khóa Cổ Đạo: <span class="locked-text">Chưa có</span></div>
+                    <div id="inv-shield" class="inventory-slot"><span class="slot-icon">⯟</span> Hộ Pháp: <span class="locked-text">Không có</span></div>
+                    <div id="inv-treasure" class="inventory-slot"><span class="slot-icon">⚱</span> Phong Ấn: <span class="locked-text">Chưa tìm thấy</span></div>
                 </div>
             </div>
 
             <div class="panel log-panel">
-                <div class="panel-header">Nhật Ký Thám Hiểm</div>
+                <div class="panel-header">Nhật Ký Khảo Cổ</div>
                 <div class="log-box" id="game-log"></div>
             </div>
         </aside>
     </div>
 
     <!-- Tutorial / Intro screen -->
-    <div id="tutorial-screen" class="overlay-screen" style="display: flex;">
-        <div class="overlay-box">
-            <span class="overlay-kicker" id="intro-theme-label">Biên niên hang động</span>
+    <div id="tutorial-screen" class="overlay-screen" style="display: flex; flex-direction: row; gap: 24px; flex-wrap: wrap; justify-content: center; align-items: stretch;">
+        <div class="overlay-box" style="margin: 0; width: min(600px, 100vw - 48px); display: flex; flex-direction: column;">
+            <span class="overlay-kicker" id="intro-theme-label">Ngũ Hành Phong Ấn</span>
             <div class="intro-visual" aria-hidden="true">
                 <div class="intro-visual-ring"></div>
                 <div class="intro-visual-core">⚱</div>
@@ -88,15 +88,33 @@
                 <div class="intro-sigil intro-sigil-fire">🔥</div>
                 <div class="intro-sigil intro-sigil-earth">⛰</div>
             </div>
-            <h2>Biên Niên Kosaraju Caves</h2>
+            <h2>Ngũ Hành Phong Ấn</h2>
             <p id="story-text" class="story-text">
-                Tương truyền dưới lòng đất cổ xưa tồn tại năm bí cảnh canh giữ cùng một cổ vật thất truyền. Mỗi lối vào của Kosaraju Caves mang một khí mạch khác nhau, và chỉ kẻ dám bước vào đúng nơi mình chọn mới có cơ hội sống sót trở ra.
+                <strong>Năm 847 SCN.</strong> Vương triều Hoa Lam Đế sụp đổ sau 300 năm. Hoàng đế Lương Thiên Đức ra lệnh thuật sĩ trưởng Khải Nguyên Đạo Nhân phân chia kho báu quốc gia thành <strong>5 mảnh Ngũ Hành Phong Ấn</strong>, cất giấu trong 5 hang động bảo vệ bằng trận pháp Kosaraju — mạng lưới đường hầm một chiều phức tạp mà chỉ bậc thầy đồ thị mới vượt được.<br><br>
+                <strong>Năm 2024.</strong> <strong>Trần Minh Khải</strong> — nhà khảo cổ độc lập 30 tuổi, người duy nhất dịch được cuốn <em>Kosaraju Toàn Thư</em> 1.200 năm tuổi. Anh biết: 5 mảnh Phong Ấn hợp nhất sẽ giải phóng <strong>Thiên Long Hồn</strong> — linh hồn rồng cổ đại bị phong ấn 1.177 năm. Anh một mình vào hang.
             </p>
             <p class="rule-text">
-                <b>Mục tiêu:</b> chọn một bí cảnh Ngũ Hành, tiến sâu vào mê đồ, tìm <b>Master Key</b>, mở <b>Ancient Relic</b> và quay lại <b>Entrance</b> còn sống.<br>
-                <b>Luật thám hiểm:</b> chỉ đi xuôi theo mũi tên. Khi nắm được <b>Crystal</b>, bạn có thể nhấn <b>V</b> để soi đường rút lui.
+                <b>Mục tiêu:</b> tìm <b>Khóa Cổ Đạo</b>, mở <b>Rương Phong Ấn</b> và thoát ra <b>cửa hang</b> còn sống.<br>
+                <b>Luật trận pháp:</b> chỉ đi xuôi theo mũi tên. Khi tìm được <b>Kosaraju Toàn Thư</b>, bấm <b>V</b> để giải mã trận pháp — đồ thị hóa <b>vô hướng</b>, đi theo <em>bất kỳ chiều nào</em>.
             </p>
-            <button id="btn-start">Chọn Bí Cảnh Khởi Hành</button>
+            <div style="display: flex; gap: 14px; margin-top: auto; justify-content: center; width: 100%;">
+                <button id="btn-show-algo" style="padding: 10px 16px; font-size: 1rem; cursor: pointer; border-radius: 4px; border: 1px solid #00bcd4; background: rgba(0, 188, 212, 0.1); color: #00bcd4; font-family: var(--font-title); font-weight: bold; transition: all 0.2s;">💡 Thuật Toán</button>
+                <button id="btn-start" style="flex: 1;">◆ Bước Vào Hang ◆</button>
+            </div>
+        </div>
+        
+        <!-- Algorithm Explanation Pop-up -->
+        <div id="algo-popup" class="algo-popup">
+            <h3 class="algo-title">💡 Ứng dụng Đồ thị & TPLTM</h3>
+            <div class="algo-content">
+                <p><b>- Nhận diện ngõ cụt:</b> Thuật toán liên tục kiểm tra <i>Tính liên thông</i> (BFS) giữa Vị trí hiện tại ➔ Khóa ➔ Rương ➔ Cửa. Nếu bạn rẽ sai và văng khỏi <i>Thành Phần Liên Thông Mạnh (SCC)</i> chứa đường thắng, game sẽ lập tức báo Game Over.</p>
+                <p><b>- Định chiều Đồ thị:</b> Tính năng "Toàn Thư" dùng thuật toán biến cấu trúc đồ thị từ <i>Có hướng</i> sang <i>Vô hướng</i>, gộp cả bản đồ thành một TPLTM khổng lồ.</p>
+            </div>
+            <div class="algo-footer">
+                <label class="algo-checkbox-label">
+                    <input type="checkbox" id="hide-algo-cb"> Không hiện lại thông báo này
+                </label>
+            </div>
         </div>
     </div>
 
@@ -129,10 +147,10 @@
     <!-- Map Selection screen -->
     <div id="map-select-screen" class="overlay-screen map-select-screen">
         <div class="overlay-box map-select-box">
-            <span class="overlay-kicker">Ngũ Hành Bí Cảnh</span>
-            <h2>Chọn Map</h2>
+            <span class="overlay-kicker">Ngũ Hành Phong Ấn</span>
+            <h2>Chọn Hang Động</h2>
             <div class="map-select-divider" aria-hidden="true"></div>
-            <p class="story-text">Mỗi ấn hiệu mở ra một khí mạch khác nhau của Kosaraju Caves. Chọn bí cảnh bạn muốn bước vào để bắt đầu hành trình.</p>
+            <p class="story-text">Mỗi ấn hiệu mở ra một hang động khác nhau trong trận pháp Kosaraju. Một Phong Ấn nằm ở cuối mỗi hang. Chọn hệ bạn muốn thám hiểm.</p>
             <div class="element-wheel" aria-label="Chọn hệ map">
                 <div class="element-wheel-ring"></div>
                 <button class="element-choice choice-metal" data-map="metal"><span>⚙</span><strong>Kim</strong></button>
@@ -161,9 +179,10 @@
         <canvas id="fireworks-canvas" style="position:absolute;inset:0;pointer-events:none;z-index:0;"></canvas>
         <div class="ultimate-win-box">
             <div class="ultimate-holy-light" aria-hidden="true"></div>
+            <div class="ultimate-dragon-icon" id="ultimate-dragon-anim" aria-hidden="true">🐉</div>
             <div class="ultimate-crown-icon" aria-hidden="true">👑</div>
-            <h2 class="ultimate-title">PHÁ ĐẢO NGŨ HÀNH</h2>
-            <p class="ultimate-subtitle">Bạn đã chinh phục toàn bộ năm bí cảnh Ngũ Hành!<br>Cổ vật của ngàn năm lịch sử nằm trong tay bạn.</p>
+            <h2 class="ultimate-title">THIÊN LONG HỒN ĐƯỢC GIẢI PHÓNG</h2>
+            <p class="ultimate-subtitle">Trần Minh Khải đã thu thập đủ 5 mảnh Ngũ Hành Phong Ấn.<br>Sau 1.177 năm bị phong ấn — <strong>Thiên Long Hồn hóa thân, trời đất rung chuyển!</strong></p>
             <div class="ultimate-trophies" id="ultimate-trophies-display">
                 <img src="victory_item_metal.png" title="Kim" class="ultimate-trophy-img">
                 <img src="victory_item_wood.png" title="Mộc" class="ultimate-trophy-img">
@@ -171,7 +190,7 @@
                 <img src="victory_item_fire.png" title="Hỏa" class="ultimate-trophy-img">
                 <img src="victory_item_earth.png" title="Thổ" class="ultimate-trophy-img">
             </div>
-            <button id="ultimate-win-close">✦ Bắt Đầu Lại Hành Trình ✦</button>
+            <button id="ultimate-win-close">♦ Bắt Đầu Lại Hành Trình ♦</button>
         </div>
     </div>
 

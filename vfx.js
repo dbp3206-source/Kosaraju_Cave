@@ -431,3 +431,204 @@ function triggerUltimateFireworks(canvas, duration = 5000) {
     }
     requestAnimationFrame(frame);
 }
+
+// ── Dragon Transform: 5-trophy ultimate ending ───────────────────────────────
+function triggerDragonTransform(canvas, onComplete) {
+    const ctx = canvas.getContext("2d");
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.style.display = "block";
+
+    const cx = canvas.width / 2, cy = canvas.height / 2;
+    const TOTAL_DURATION = 4200;
+    let startTime = null;
+
+    // Rune symbols orbiting the center
+    const RUNES = ["☯","✦","⚡","◈","✧","⎊","⟁","✺"];
+    const runeCount = 12;
+    const runes = Array.from({length: runeCount}, (_, i) => ({
+        symbol: RUNES[i % RUNES.length],
+        angle: (i / runeCount) * Math.PI * 2,
+        orbitR: 140,
+        speed: 0.022 + (i % 3) * 0.008
+    }));
+
+    // Fire breath particles from dragon mouth
+    const flames = Array.from({length: 120}, () => ({
+        x: cx + 40, y: cy - 10,
+        vx: 4 + Math.random() * 10,
+        vy: (Math.random() - 0.5) * 5,
+        r: 6 + Math.random() * 12,
+        life: 1,
+        decay: 0.016 + Math.random() * 0.02,
+        color: ["#ff4500","#ff6a00","#ffbd66","#ff2200","#fff200"][Math.floor(Math.random() * 5)]
+    }));
+
+    function frame(ts) {
+        if (!startTime) startTime = ts;
+        const elapsed = ts - startTime;
+        const t = Math.min(elapsed / TOTAL_DURATION, 1);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Phase 1 (0–0.25): dark backdrop fades in
+        const bgAlpha = Math.min(t / 0.25, 1) * 0.88;
+        ctx.fillStyle = `rgba(5,3,15,${bgAlpha})`;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Phase 1–2 (0–0.45): magic hexagon + runes appear
+        if (t < 0.55) {
+            const ringAlpha = Math.min(t / 0.3, 1);
+            // Outer ring
+            ctx.save();
+            ctx.globalAlpha = ringAlpha * 0.7;
+            ctx.strokeStyle = "#ffd700";
+            ctx.shadowColor = "#ffd700";
+            ctx.shadowBlur = 24;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(cx, cy, 160, 0, Math.PI * 2);
+            ctx.stroke();
+            // Inner ring
+            ctx.strokeStyle = "#ff4500";
+            ctx.shadowColor = "#ff4500";
+            ctx.beginPath();
+            ctx.arc(cx, cy, 110, 0, Math.PI * 2);
+            ctx.stroke();
+            ctx.restore();
+
+            // Hexagon
+            ctx.save();
+            ctx.globalAlpha = ringAlpha * 0.5;
+            ctx.strokeStyle = "#ce93d8";
+            ctx.shadowColor = "#ce93d8";
+            ctx.shadowBlur = 16;
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+                const a = (i / 6) * Math.PI * 2 + elapsed * 0.001;
+                const rx = cx + 160 * Math.cos(a), ry = cy + 160 * Math.sin(a);
+                i === 0 ? ctx.moveTo(rx, ry) : ctx.lineTo(rx, ry);
+            }
+            ctx.closePath();
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // Orbiting runes (0.05 – 0.6)
+        if (t > 0.05 && t < 0.65) {
+            const runeAlpha = Math.min((t - 0.05) / 0.15, 1) * Math.min((0.65 - t) / 0.1, 1);
+            runes.forEach(r => {
+                r.angle += r.speed;
+                const rx = cx + r.orbitR * Math.cos(r.angle);
+                const ry = cy + r.orbitR * Math.sin(r.angle);
+                ctx.save();
+                ctx.globalAlpha = runeAlpha * 0.9;
+                ctx.font = "bold 18px Georgia";
+                ctx.fillStyle = "#ffd700";
+                ctx.shadowColor = "#ff8800";
+                ctx.shadowBlur = 14;
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText(r.symbol, rx, ry);
+                ctx.restore();
+            });
+        }
+
+        // Phase 2 (0.3–0.55): white-gold burst
+        if (t >= 0.3 && t < 0.65) {
+            const burstProgress = (t - 0.3) / 0.35;
+            const burstAlpha = burstProgress < 0.5
+                ? burstProgress / 0.5
+                : 1 - (burstProgress - 0.5) / 0.5;
+            const burstR = 20 + burstProgress * 420;
+            const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, burstR);
+            grad.addColorStop(0, `rgba(255,255,220,${burstAlpha * 0.9})`);
+            grad.addColorStop(0.3, `rgba(255,200,50,${burstAlpha * 0.5})`);
+            grad.addColorStop(0.7, `rgba(255,100,0,${burstAlpha * 0.15})`);
+            grad.addColorStop(1, "rgba(0,0,0,0)");
+            ctx.fillStyle = grad;
+            ctx.beginPath();
+            ctx.arc(cx, cy, burstR, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Phase 3 (0.5–1.0): DRAGON appears
+        if (t >= 0.5) {
+            const dragonProgress = (t - 0.5) / 0.5;
+            const scaleVal = dragonProgress < 0.35
+                ? 0.1 + (dragonProgress / 0.35) * 1.15
+                : dragonProgress < 0.55
+                    ? 1.25 - ((dragonProgress - 0.35) / 0.2) * 0.25
+                    : 1.0;
+            const dragonAlpha = Math.min(dragonProgress / 0.2, 1);
+
+            ctx.save();
+            ctx.globalAlpha = dragonAlpha;
+            ctx.translate(cx, cy - 30);
+            ctx.scale(scaleVal, scaleVal);
+            ctx.font = "160px serif";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            // Layered glow
+            ctx.shadowColor = "#ff4500";
+            ctx.shadowBlur = 60 + Math.sin(elapsed * 0.005) * 20;
+            ctx.fillText("🐉", 0, 0);
+            ctx.shadowColor = "#ffd700";
+            ctx.shadowBlur = 30 + Math.sin(elapsed * 0.007) * 10;
+            ctx.fillText("🐉", 0, 0);
+            ctx.restore();
+        }
+
+        // Phase 4 (0.72–1.0): Fire breath particles
+        if (t >= 0.72) {
+            const fireAlpha = Math.min((t - 0.72) / 0.1, 1) * (t > 0.93 ? (1 - t) / 0.07 : 1);
+            flames.forEach(f => {
+                if (f.life <= 0) {
+                    f.x = cx + 40; f.y = cy - 10;
+                    f.vx = 4 + Math.random() * 10;
+                    f.vy = (Math.random() - 0.5) * 5;
+                    f.life = 0.7 + Math.random() * 0.3;
+                }
+                ctx.globalAlpha = f.life * fireAlpha;
+                ctx.fillStyle = f.color;
+                ctx.shadowColor = f.color;
+                ctx.shadowBlur = 16;
+                ctx.beginPath();
+                ctx.arc(f.x, f.y, f.r * f.life, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.shadowBlur = 0;
+                f.x += f.vx; f.y += f.vy; f.life -= f.decay;
+                f.vy += 0.08;
+            });
+            ctx.globalAlpha = 1;
+        }
+
+        // Bottom text "THIÊN LONG GIÁC NGỘ" fade in at t > 0.6
+        if (t > 0.6) {
+            const textAlpha = Math.min((t - 0.6) / 0.15, 1) * (t > 0.9 ? (1 - t) / 0.1 : 1);
+            ctx.save();
+            ctx.globalAlpha = textAlpha;
+            ctx.font = "bold 28px 'Cinzel', Georgia, serif";
+            ctx.textAlign = "center";
+            ctx.fillStyle = "#ffd700";
+            ctx.shadowColor = "#ff6600";
+            ctx.shadowBlur = 20;
+            ctx.fillText("THIÊN LONG GIÁC NGỘ", cx, cy + 140);
+            ctx.font = "16px 'Cinzel', Georgia, serif";
+            ctx.fillStyle = "#fff3aa";
+            ctx.shadowBlur = 10;
+            ctx.fillText("Ng\u0169 H\u00e0nh \u0111\u00e3 \u0111\u1ee7. S\u1ee9c m\u1ea1nh c\u1ed5 x\u01b0a th\u1ee9c t\u1ec9nh.", cx, cy + 175);
+            ctx.restore();
+        }
+
+        if (t < 1) {
+            requestAnimationFrame(frame);
+        } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.style.display = "none";
+            if (onComplete) onComplete();
+        }
+    }
+    requestAnimationFrame(frame);
+}
