@@ -3,18 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kosaraju Caves</title>
+    <title>Kosaraju Caves — Ngũ Hành Bí Cảnh</title>
+    <meta name="description" content="Khám phá năm bí cảnh Ngũ Hành, vượt qua mê đồ đồ thị và chinh phục cổ vật thất truyền trong Kosaraju Caves.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
 </head>
 <body>
+    <!-- Background particle canvas (behind Phaser) -->
+    <canvas id="bg-canvas"></canvas>
+
     <div id="map-ambience" aria-hidden="true"></div>
     <div id="phaser-game"></div>
+
+    <!-- Cave collapse overlay canvas -->
+    <canvas id="collapse-canvas" style="display:none;position:fixed;inset:0;z-index:9998;pointer-events:none;"></canvas>
 
     <div id="ui-layer">
         <header>
             <h1 id="game-title" data-symbol="◆">KOSARAJU CAVES</h1>
             <div class="controls">Khám phá: <span>Click Node</span> Ancient Vision: <span>Phím V</span></div>
+            <!-- Trophy Bar -->
+            <div id="trophy-bar-wrap">
+                <span class="trophy-bar-label">Kho chiến tích</span>
+                <div id="trophy-bar"></div>
+                <button id="reset-trophies-btn" title="Xóa chiến tích">↺</button>
+            </div>
         </header>
 
         <button id="map-select-btn" class="map-select-btn">Đổi Map</button>
@@ -34,7 +50,7 @@
                     <span>HP</span>
                     <div class="hp-bar">
                         <div id="hp-fill" class="hp-fill"></div>
-                        <div id="hp-text" class="hp-text">100 / 100</div>
+                        <div id="hp-text" class="hp-text">60 / 60</div>
                     </div>
                 </div>
                 <div class="stat-row">
@@ -43,7 +59,7 @@
             </div>
 
             <div class="panel">
-                <div class="panel-header">Túi Đồ & Trang Bị</div>
+                <div class="panel-header">Túi Đồ &amp; Trang Bị</div>
                 <div class="grid-inventory">
                     <div id="inv-vision" class="inventory-slot"><span class="slot-icon">◉</span> Vision: <span class="locked-text">Chưa mở</span></div>
                     <div id="inv-key" class="inventory-slot"><span class="slot-icon">⚿</span> Master Key: <span class="locked-text">Chưa có</span></div>
@@ -59,6 +75,7 @@
         </aside>
     </div>
 
+    <!-- Tutorial / Intro screen -->
     <div id="tutorial-screen" class="overlay-screen" style="display: flex;">
         <div class="overlay-box">
             <span class="overlay-kicker" id="intro-theme-label">Biên niên hang động</span>
@@ -83,16 +100,24 @@
         </div>
     </div>
 
+    <!-- Death / Game Over screen (Cave Collapse style) -->
     <div id="death-screen" class="overlay-screen">
-        <div class="overlay-box">
-            <h2 id="death-title" class="danger-text">BẠN ĐÃ GỤC NGÃ</h2>
-            <p id="death-reason" class="center-large">...</p>
+        <div class="overlay-box death-box">
+            <div class="death-cracks" aria-hidden="true">
+                <div class="death-crack-1"></div>
+                <div class="death-crack-2"></div>
+                <div class="death-crack-3"></div>
+            </div>
+            <div class="death-skull" aria-hidden="true">💀</div>
+            <h2 id="death-title" class="danger-text death-title">HANG ĐỘNG SỤP ĐỔ</h2>
+            <p id="death-reason" class="center-large death-reason">...</p>
             <div class="overlay-actions">
-                <button onclick="viewMapAfterDeath()">Xem Lại Map</button>
+                <button onclick="viewMapAfterDeath()">☠ Xem Lại Đường Đi</button>
             </div>
         </div>
     </div>
 
+    <!-- Legacy win screen (kept for fallback, victory sequence replaces it) -->
     <div id="win-screen" class="overlay-screen">
         <div class="overlay-box">
             <h2>THOÁT KHỎI HANG</h2>
@@ -101,6 +126,7 @@
         </div>
     </div>
 
+    <!-- Map Selection screen -->
     <div id="map-select-screen" class="overlay-screen map-select-screen">
         <div class="overlay-box map-select-box">
             <span class="overlay-kicker">Ngũ Hành Bí Cảnh</span>
@@ -124,8 +150,36 @@
         </div>
     </div>
 
+    <!-- Victory Sequence Overlay -->
+    <div id="victory-overlay" class="overlay-screen victory-overlay" style="display:none;">
+        <canvas id="victory-vfx-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
+        <div id="victory-item-panel" class="victory-item-panel" style="display:none;"></div>
+    </div>
+
+    <!-- Ultimate Win Screen -->
+    <div id="ultimate-win-screen" class="overlay-screen ultimate-win-screen" style="display:none;">
+        <canvas id="fireworks-canvas" style="position:absolute;inset:0;pointer-events:none;z-index:0;"></canvas>
+        <div class="ultimate-win-box">
+            <div class="ultimate-holy-light" aria-hidden="true"></div>
+            <div class="ultimate-crown-icon" aria-hidden="true">👑</div>
+            <h2 class="ultimate-title">PHÁ ĐẢO NGŨ HÀNH</h2>
+            <p class="ultimate-subtitle">Bạn đã chinh phục toàn bộ năm bí cảnh Ngũ Hành!<br>Cổ vật của ngàn năm lịch sử nằm trong tay bạn.</p>
+            <div class="ultimate-trophies" id="ultimate-trophies-display">
+                <img src="victory_item_metal.png" title="Kim" class="ultimate-trophy-img">
+                <img src="victory_item_wood.png" title="Mộc" class="ultimate-trophy-img">
+                <img src="victory_item_water.png" title="Thủy" class="ultimate-trophy-img">
+                <img src="victory_item_fire.png" title="Hỏa" class="ultimate-trophy-img">
+                <img src="victory_item_earth.png" title="Thổ" class="ultimate-trophy-img">
+            </div>
+            <button id="ultimate-win-close">✦ Bắt Đầu Lại Hành Trình ✦</button>
+        </div>
+    </div>
+
+    <!-- Trap / Pickup VFX container -->
     <div id="trap-effect-container" class="trap-effect-container"></div>
+
     <script src="mapGenerator.js"></script>
+    <script src="vfx.js"></script>
     <script src="ui.js"></script>
     <script src="game.js"></script>
 </body>

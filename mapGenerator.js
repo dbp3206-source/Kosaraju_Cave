@@ -50,16 +50,34 @@ function generateDungeonMap(numNodes = 16) {
     nodes[2].type = "item"; nodes[2].item = "Ancient Vision"; nodes[2].icon = "◆"; nodes[2].label = "Crystal";
     nodes[3].type = "treasure"; nodes[3].icon = "⚱"; nodes[3].label = "Ancient Relic";
 
+    // ── Trap types with doubled damage ──
     let trapTypes = [
-        { t: "Spikes", d: 20, i: "⚔" },
-        { t: "Poison", d: 15, i: "☠" },
-        { t: "Fire", d: 35, i: "🔥" },
-        { t: "Bandit", d: 25, i: "♞" },
-        { t: "Tornado", d: 30, i: "◌" },
-        { t: "Lightning", d: 40, i: "⚡" }
+        { t: "Spikes",    d: 40, i: "⚔" },
+        { t: "Poison",    d: 30, i: "☠" },
+        { t: "Fire",      d: 65, i: "🔥" },
+        { t: "Bandit",    d: 50, i: "♞" },
+        { t: "Tornado",   d: 55, i: "◌" },
+        { t: "Lightning", d: 75, i: "⚡" }
     ];
 
+    // ── Assign types to non-fixed nodes ──
+    // Reserve two indices for Magic Door pair (pick indices 4 and 5 from pool)
+    let magicDoorA = -1, magicDoorB = -1;
+    let doorAssigned = 0;
+
     for (let i = 4; i < numNodes; i++) {
+        // First two eligible nodes become the Magic Door pair
+        if (doorAssigned === 0) {
+            magicDoorA = i;
+            doorAssigned++;
+            continue; // assign type after we know both ids
+        }
+        if (doorAssigned === 1) {
+            magicDoorB = i;
+            doorAssigned++;
+            continue;
+        }
+
         let rand = Math.random();
         if (rand < 0.40) {
             let tr = trapTypes[Math.floor(Math.random() * trapTypes.length)];
@@ -69,6 +87,19 @@ function generateDungeonMap(numNodes = 16) {
         } else if (rand < 0.65) {
             nodes[i].type = "shield"; nodes[i].icon = "⬟"; nodes[i].label = "Shield";
         }
+    }
+
+    // Finalize Magic Door pair
+    if (magicDoorA >= 0 && magicDoorB >= 0) {
+        nodes[magicDoorA].type = "magic_door";
+        nodes[magicDoorA].icon = "🚪";
+        nodes[magicDoorA].label = "Magic Door";
+        nodes[magicDoorA].linkedDoor = magicDoorB;
+
+        nodes[magicDoorB].type = "magic_door";
+        nodes[magicDoorB].icon = "🚪";
+        nodes[magicDoorB].label = "Magic Door";
+        nodes[magicDoorB].linkedDoor = magicDoorA;
     }
 
     let t1_node = nodePerTier[1][Math.floor(Math.random() * nodePerTier[1].length)].id;
@@ -109,7 +140,7 @@ function generateDungeonMap(numNodes = 16) {
 
 const levelData = generateDungeonMap(16);
 let gameState = {
-    currentNode: 0, hp: 100, maxHp: 100,
+    currentNode: 0, hp: 60, maxHp: 60,
     inventory: { "Ancient Vision": false, "Master Key": false, "Treasure": false, "Shield": false },
     visitedNodes: new Set([0]), visionMode: false, isMoving: false, isDead: false
 };

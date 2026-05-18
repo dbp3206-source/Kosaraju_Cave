@@ -1,89 +1,54 @@
+/* ui.js */
 let isLightMode = false;
 
 const ELEMENT_THEMES = [
     {
-        id: "metal",
-        name: "Kim",
-        title: "Thiết Mạch Cổ Thành",
-        primary: "#d8d9d4",
-        secondary: "#ffd700",
-        symbol: "⚙",
-        edge: 0xffd700,
-        reverseEdge: 0xaee7ff,
-        safe: 0x9aa0a6,
-        trap: 0x6f7781,
-        item: 0xffd700,
+        id: "metal", name: "Kim", title: "Thiết Mạch Cổ Thành", primary: "#d8d9d4", secondary: "#ffd700",
+        symbol: "⚙", edge: 0xffd700, reverseEdge: 0xaee7ff, safe: 0x9aa0a6, trap: 0x6f7781, item: 0xffd700,
         story: "Vòm hang mở vào một thành quách bằng sắt nguội. Tiếng bánh răng cổ vang lên dưới nền đá, như thể cả bản đồ đang chờ người đủ gan bước tới."
     },
     {
-        id: "wood",
-        name: "Mộc",
-        title: "Lâm Động Rễ Sâu",
-        primary: "#72b66f",
-        secondary: "#c48a42",
-        symbol: "🌳",
-        edge: 0xcfa45b,
-        reverseEdge: 0x72d987,
-        safe: 0x4e7c48,
-        trap: 0x3f2e19,
-        item: 0x72d987,
-        story: "Rễ cây già quấn quanh miệng hang, kéo hơi thở của rừng xuống tận lòng đất. Mỗi node sáng lên như một dấu vết còn ấm trên vỏ cây cổ."
+        id: "wood", name: "Mộc", title: "Lâm Động Rễ Sâu", primary: "#72b66f", secondary: "#c48a42",
+        symbol: "🌳", edge: 0xcfa45b, reverseEdge: 0x72d987, safe: 0x4e7c48, trap: 0x3f2e19, item: 0x72d987,
+        story: "Rễ cây già quấn quanh miệng hang, kéo hơi thở của rừng xuống tận lòng đất."
     },
     {
-        id: "water",
-        name: "Thủy",
-        title: "Băng Tuyết U Cốc",
-        primary: "#9ee7ff",
-        secondary: "#1aa4c8",
-        symbol: "❄",
-        edge: 0x9ee7ff,
-        reverseEdge: 0xffffff,
-        safe: 0x2f7289,
-        trap: 0x1b3242,
-        item: 0xbef4ff,
-        story: "Tuyết lạnh quất qua lòng hang, phủ lên bản đồ một màn trắng mỏng và sắc. Dưới hơi băng, chỉ người đủ bình tĩnh mới đọc được lối đi."
+        id: "water", name: "Thủy", title: "Băng Tuyết U Cốc", primary: "#9ee7ff", secondary: "#1aa4c8",
+        symbol: "❄", edge: 0x9ee7ff, reverseEdge: 0xffffff, safe: 0x2f7289, trap: 0x1b3242, item: 0xbef4ff,
+        story: "Tuyết lạnh quất qua lòng hang, phủ lên bản đồ một màn trắng mỏng và sắc."
     },
     {
-        id: "fire",
-        name: "Hỏa",
-        title: "Hỏa Long Hắc Động",
-        primary: "#ffbd66",
-        secondary: "#8b0000",
-        symbol: "🔥",
-        edge: 0xffbd66,
-        reverseEdge: 0xff5a3d,
-        safe: 0x8b2f18,
-        trap: 0xb10f0f,
-        item: 0xffd166,
-        story: "Nham thạch đỏ rực cháy trong khe đá như mạch máu của hang sâu. Bản đồ cháy lên từng nhịp, nhắc rằng một bước sai cũng đủ hóa tro."
+        id: "fire", name: "Hỏa", title: "Hỏa Long Hắc Động", primary: "#ffbd66", secondary: "#8b0000",
+        symbol: "🔥", edge: 0xffbd66, reverseEdge: 0xff5a3d, safe: 0x8b2f18, trap: 0xb10f0f, item: 0xffd166,
+        story: "Nham thạch đỏ rực cháy trong khe đá như mạch máu của hang sâu."
     },
     {
-        id: "earth",
-        name: "Thổ",
-        title: "Huyền Thổ Mộ Đạo",
-        primary: "#c49b62",
-        secondary: "#5f432c",
-        symbol: "⛰",
-        edge: 0xc49b62,
-        reverseEdge: 0xe0c085,
-        safe: 0x6f5638,
-        trap: 0x3b2b1f,
-        item: 0xd5a76b,
-        story: "Đất đen ép xuống từ bốn phía, để lộ những đường khắc nâu sẫm trên nền cổ mộ. Kosaraju Caves ở hệ này chậm rãi, nặng nề và không tha thứ."
+        id: "earth", name: "Thổ", title: "Huyền Thổ Mộ Đạo", primary: "#c49b62", secondary: "#5f432c",
+        symbol: "⛰", edge: 0xc49b62, reverseEdge: 0xe0c085, safe: 0x6f5638, trap: 0x3b2b1f, item: 0xd5a76b,
+        story: "Đất đen ép xuống từ bốn phía, để lộ những đường khắc nâu sẫm trên nền cổ mộ."
     }
 ];
 
+// Victory items per element
+const VICTORY_ITEMS = {
+    metal: { name: "Lõi Kim Loại Bí Ẩn", icon: "victory_item_metal.png", desc: "Một lõi hình học vàng bạc phát ra các tia sáng sắc nét.", cssClass: "vitem-metal", color: "#ffd700" },
+    wood:  { name: "Hạt Giống Sinh Mệnh", icon: "victory_item_wood.png", desc: "Một hạt giống ngọc bích tỏa ra những chiếc lá phát sáng huyền bí.", cssClass: "vitem-wood",  color: "#72d987" },
+    water: { name: "Giọt Nước Vĩnh Cửu", icon: "victory_item_water.png", desc: "Một viên hổ phách xanh hình giọt nước tỏa ra hào quang bình yên.", cssClass: "vitem-water", color: "#9ee7ff" },
+    fire:  { name: "Nanh Hỏa Long",       icon: "victory_item_fire.png", desc: "Một chiếc nanh đen tuyền của hỏa long đang bốc cháy vĩnh cửu.",  cssClass: "vitem-fire",  color: "#ff4500" },
+    earth: { name: "Tinh Thể Hạt Nhân Đất", icon: "victory_item_earth.png", desc: "Một tinh thể hổ phách thô phát sáng với những mảnh đá nhỏ quay quanh.", cssClass: "vitem-earth", color: "#c49b62" }
+};
+
+// ── Theme selection ───────────────────────────────────────────────────────────
 function chooseElementTheme() {
     const forcedTheme = localStorage.getItem("kosaraju-forced-element");
-    const directPick = ELEMENT_THEMES.find((theme) => theme.id === forcedTheme);
+    const directPick = ELEMENT_THEMES.find(t => t.id === forcedTheme);
     if (directPick) {
         localStorage.removeItem("kosaraju-forced-element");
         localStorage.setItem("kosaraju-last-element", directPick.id);
         return directPick;
     }
-
     const lastTheme = localStorage.getItem("kosaraju-last-element");
-    const themePool = ELEMENT_THEMES.filter((theme) => theme.id !== lastTheme);
+    const themePool = ELEMENT_THEMES.filter(t => t.id !== lastTheme);
     const selected = themePool[Math.floor(Math.random() * themePool.length)] || ELEMENT_THEMES[0];
     localStorage.setItem("kosaraju-last-element", selected.id);
     return selected;
@@ -93,19 +58,59 @@ window.currentElementTheme = chooseElementTheme();
 document.body.dataset.element = window.currentElementTheme.id;
 
 const shouldSkipIntro = sessionStorage.getItem("kosaraju-skip-intro") === "1";
-if (shouldSkipIntro) {
-    sessionStorage.removeItem("kosaraju-skip-intro");
+if (shouldSkipIntro) sessionStorage.removeItem("kosaraju-skip-intro");
+
+// ── Trophy State ──────────────────────────────────────────────────────────────
+window.trophyState = JSON.parse(localStorage.getItem("kosaraju-trophies") || "{}");
+
+function saveTrophy(elementId) {
+    window.trophyState[elementId] = true;
+    localStorage.setItem("kosaraju-trophies", JSON.stringify(window.trophyState));
+    renderTrophyBar();
 }
 
+function renderTrophyBar() {
+    const bar = document.getElementById("trophy-bar");
+    if (!bar) return;
+    const order = ["metal","wood","water","fire","earth"];
+    const colorMap = { metal:"#ffd700", wood:"#72d987", water:"#9ee7ff", fire:"#ff4500", earth:"#c49b62" };
+    bar.innerHTML = order.map(id => {
+        const claimed = window.trophyState[id];
+        return `<div class="trophy-slot ${claimed ? "trophy-slot--claimed" : ""}" title="${VICTORY_ITEMS[id]?.name || id}" style="${claimed ? "--trophy-color:"+colorMap[id] : ""}">
+            ${claimed ? `<img src="${VICTORY_ITEMS[id].icon}" class="trophy-icon-img" alt="trophy">` : `<span class="trophy-empty">❌</span>`}
+        </div>`;
+    }).join("");
+}
+
+function checkUltimateWin() {
+    const order = ["metal","wood","water","fire","earth"];
+    if (order.every(id => window.trophyState[id])) {
+        setTimeout(() => triggerUltimateWin(), 600);
+    }
+}
+
+function triggerUltimateWin() {
+    const overlay = document.getElementById("ultimate-win-screen");
+    const fwCanvas = document.getElementById("fireworks-canvas");
+    if (overlay) overlay.style.display = "flex";
+    if (fwCanvas && typeof triggerUltimateFireworks === "function") {
+        triggerUltimateFireworks(fwCanvas, 6000);
+    }
+}
+
+// ── UI Text ───────────────────────────────────────────────────────────────────
 function applyThemeText() {
     const theme = window.currentElementTheme;
     const gameTitle = document.getElementById("game-title");
     if (gameTitle) gameTitle.dataset.symbol = theme.symbol;
     document.getElementById("map-theme-name").innerText = `Map hệ ${theme.name}`;
     document.getElementById("map-theme-title").innerText = theme.title;
-    document.getElementById("intro-theme-label").innerText = "Biên niên hang động";
+    document.getElementById("intro-theme-label").innerText = `Biên niên hang động — Hệ ${theme.name}`;
+    const storyEl = document.getElementById("story-text");
+    if (storyEl && theme.story) storyEl.innerText = theme.story;
 }
 
+// ── Logging ───────────────────────────────────────────────────────────────────
 function addLog(msg, type = "") {
     const logBox = document.getElementById("game-log");
     const entry = document.createElement("div");
@@ -115,10 +120,25 @@ function addLog(msg, type = "") {
     logBox.scrollTop = logBox.scrollHeight;
 }
 
+// ── Cave Collapse + Game Over ─────────────────────────────────────────────────
 function triggerGameOver(reason) {
+    if (gameState.isDead) return;
     gameState.isDead = true;
-    document.getElementById("death-screen").style.display = "flex";
+    const collapseCanvas = document.getElementById("collapse-canvas");
+    if (collapseCanvas && typeof triggerCollapseCanvas === "function") {
+        triggerCollapseCanvas(collapseCanvas, () => showDeathScreen(reason));
+    } else {
+        showDeathScreen(reason);
+    }
+}
+
+function showDeathScreen(reason) {
+    const screen = document.getElementById("death-screen");
     document.getElementById("death-reason").innerText = reason;
+    screen.style.display = "flex";
+    // trigger CSS shake on death box
+    const box = screen.querySelector(".overlay-box");
+    if (box) { box.classList.add("death-appear"); }
 }
 
 function viewMapAfterDeath() {
@@ -126,11 +146,70 @@ function viewMapAfterDeath() {
     document.getElementById("death-screen").style.display = "none";
 }
 
+// ── Victory Sequence ──────────────────────────────────────────────────────────
+function triggerVictorySequence(elementId) {
+    gameState.isDead = true; // freeze input
+    const overlay = document.getElementById("victory-overlay");
+    const vfxCanvas = document.getElementById("victory-vfx-canvas");
+    const itemPanel = document.getElementById("victory-item-panel");
+    if (!overlay || !vfxCanvas || !itemPanel) return;
+
+    overlay.style.display = "flex";
+    itemPanel.style.display = "none";
+    vfxCanvas.style.display = "block";
+
+    if (typeof triggerVictoryCanvasVFX === "function") {
+        triggerVictoryCanvasVFX(elementId, vfxCanvas, () => {
+            vfxCanvas.style.display = "none";
+            showVictoryItem(elementId, itemPanel);
+        });
+    } else {
+        vfxCanvas.style.display = "none";
+        showVictoryItem(elementId, itemPanel);
+    }
+}
+
+function showVictoryItem(elementId, panel) {
+    const item = VICTORY_ITEMS[elementId];
+    if (!item) return;
+    panel.style.display = "flex";
+    panel.innerHTML = `
+        <div class="vitem-container ${item.cssClass}">
+            <div class="vitem-glow-ring"></div>
+            <div class="vitem-icon-wrap">
+                <img src="${item.icon}" class="vitem-image" alt="${item.name}">
+            </div>
+            <div class="vitem-orbits"></div>
+        </div>
+        <h2 class="vitem-name">${item.name}</h2>
+        <p class="vitem-desc">${item.desc}</p>
+        <button id="claim-victory-btn" class="claim-btn">✦ Nhận Lấy ✦</button>
+    `;
+    requestAnimationFrame(() => panel.classList.add("victory-item-visible"));
+
+    document.getElementById("claim-victory-btn").addEventListener("click", () => {
+        if (window.trophyState[elementId]) {
+            // already claimed, just close
+            document.getElementById("victory-overlay").style.display = "none";
+            return;
+        }
+        panel.classList.add("claim-fly-out");
+        setTimeout(() => {
+            saveTrophy(elementId);
+            document.getElementById("victory-overlay").style.display = "none";
+            panel.classList.remove("claim-fly-out","victory-item-visible");
+            checkUltimateWin();
+        }, 700);
+    });
+}
+
+// ── Win / Close ───────────────────────────────────────────────────────────────
 function closeWinScreen() {
     window.scrollTo(0, 0);
     document.getElementById("win-screen").style.display = "none";
 }
 
+// ── Inventory UI ──────────────────────────────────────────────────────────────
 function setInventorySlot(slotId, isActive, content) {
     const slot = document.getElementById(slotId);
     slot.classList.toggle("inventory-slot--active", isActive);
@@ -138,10 +217,10 @@ function setInventorySlot(slotId, isActive, content) {
 }
 
 function updateUI() {
-    document.getElementById("hp-text").innerText = `${gameState.hp} / ${gameState.maxHp}`;
+    document.getElementById("hp-text").innerText = `${Math.max(0,gameState.hp)} / ${gameState.maxHp}`;
     document.getElementById("hp-fill").style.width = `${Math.max(0, (gameState.hp / gameState.maxHp) * 100)}%`;
 
-    if (gameState.hp <= 35) {
+    if (gameState.hp <= 20) {
         document.getElementById("hp-fill").style.background = "linear-gradient(90deg, #3b0000, #d9534f, #3b0000)";
     } else {
         document.getElementById("hp-fill").style.background =
@@ -150,60 +229,97 @@ function updateUI() {
 
     document.getElementById("nodes-explored").innerText = gameState.visitedNodes.size;
 
-    setInventorySlot(
-        "inv-vision",
-        gameState.inventory["Ancient Vision"],
+    setInventorySlot("inv-vision", gameState.inventory["Ancient Vision"],
         gameState.inventory["Ancient Vision"]
-            ? `<span class="slot-icon">◉</span> Vision: <span class="highlight-text">Sẵn sàng (V)</span>`
-            : `<span class="slot-icon">◉</span> Vision: <span class="locked-text">Chưa mở</span>`
-    );
+            ? `<span class="slot-icon" style="color:#00bcd4">◉</span> Vision: <span class="highlight-text">Sẵn sàng (V)</span>`
+            : `<span class="slot-icon">◉</span> Vision: <span class="locked-text">Chưa mở</span>`);
 
-    setInventorySlot(
-        "inv-key",
-        gameState.inventory["Master Key"],
+    setInventorySlot("inv-key", gameState.inventory["Master Key"],
         gameState.inventory["Master Key"]
-            ? `<span class="slot-icon">⚿</span> Master Key: <span class="highlight-text">Đã lấy</span>`
-            : `<span class="slot-icon">⚿</span> Master Key: <span class="locked-text">Chưa có</span>`
-    );
+            ? `<span class="slot-icon" style="color:#ffd700">⚿</span> Master Key: <span class="highlight-text">Đã lấy</span>`
+            : `<span class="slot-icon">⚿</span> Master Key: <span class="locked-text">Chưa có</span>`);
 
-    setInventorySlot(
-        "inv-treasure",
-        gameState.inventory["Treasure"],
+    setInventorySlot("inv-treasure", gameState.inventory["Treasure"],
         gameState.inventory["Treasure"]
-            ? `<span class="slot-icon">⚱</span> Relic: <span class="highlight-text">Đã lấy</span>`
-            : `<span class="slot-icon">⚱</span> Relic: <span class="locked-text">Chưa tìm thấy</span>`
-    );
+            ? `<span class="slot-icon" style="color:#ff8f00">⚱</span> Relic: <span class="highlight-text">Đã lấy</span>`
+            : `<span class="slot-icon">⚱</span> Relic: <span class="locked-text">Chưa tìm thấy</span>`);
 
-    setInventorySlot(
-        "inv-shield",
-        gameState.inventory["Shield"],
+    setInventorySlot("inv-shield", gameState.inventory["Shield"],
         gameState.inventory["Shield"]
-            ? `<span class="slot-icon">⬟</span> Shield: <span class="highlight-text">Đang có</span>`
-            : `<span class="slot-icon">⬟</span> Shield: <span class="locked-text">Không có</span>`
-    );
+            ? `<span class="slot-icon" style="color:#607d8b">⬟</span> Shield: <span class="highlight-text">Đang có</span>`
+            : `<span class="slot-icon">⬟</span> Shield: <span class="locked-text">Không có</span>`);
 
     if (gameState.hp <= 0 && !gameState.isDead) {
         triggerGameOver("Bạn đã gục ngã vì kiệt sức và mất máu.");
     }
 }
 
-function triggerTrapEffect() {
+// ── Trap VFX by trap label ────────────────────────────────────────────────────
+function triggerTrapEffect(trapLabel) {
     const container = document.getElementById("trap-effect-container");
     if (!container) return;
 
-    const element = document.body.dataset.element;
-    container.className = `trap-effect-container active trap-effect-${element}`;
-
+    const labelMap = {
+        "Fire":      "trap-vfx-fire",
+        "Lightning": "trap-vfx-lightning",
+        "Poison":    "trap-vfx-poison",
+        "Spikes":    "trap-vfx-spikes",
+        "Tornado":   "trap-vfx-tornado",
+        "Bandit":    "trap-vfx-bandit"
+    };
+    const cls = labelMap[trapLabel] || "trap-vfx-generic";
+    container.className = `trap-effect-container active ${cls}`;
     setTimeout(() => {
         container.classList.remove("active");
-        setTimeout(() => {
-            container.className = "trap-effect-container";
-        }, 400);
+        setTimeout(() => { container.className = "trap-effect-container"; }, 400);
     }, 1200);
 }
 
-applyThemeText();
+// ── Pickup VFX ────────────────────────────────────────────────────────────────
+function triggerPickupVFX(type) {
+    const container = document.getElementById("trap-effect-container");
+    if (!container) return;
+    const clsMap = { heal: "pickup-vfx-heal", key: "pickup-vfx-key", shield: "pickup-vfx-shield", crystal: "pickup-vfx-crystal" };
+    const cls = clsMap[type] || "";
+    if (!cls) return;
+    container.className = `trap-effect-container active ${cls}`;
+    setTimeout(() => {
+        container.classList.remove("active");
+        setTimeout(() => { container.className = "trap-effect-container"; }, 400);
+    }, 1000);
+}
 
+// ── Magic Door Warp VFX ───────────────────────────────────────────────────────
+function triggerWarpVFX(onComplete) {
+    const container = document.getElementById("trap-effect-container");
+    if (!container) { if (onComplete) onComplete(); return; }
+    container.className = "trap-effect-container active trap-vfx-warp";
+    setTimeout(() => {
+        container.classList.remove("active");
+        setTimeout(() => { container.className = "trap-effect-container"; if (onComplete) onComplete(); }, 400);
+    }, 900);
+}
+
+// ── Floating +HP text ─────────────────────────────────────────────────────────
+function spawnFloatingText(text, color = "#2ecc71") {
+    const el = document.createElement("div");
+    el.className = "floating-text";
+    el.textContent = text;
+    el.style.cssText = `color:${color};left:${40+Math.random()*20}%;top:50%;`;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1400);
+}
+
+// ── Apply theme on load ───────────────────────────────────────────────────────
+applyThemeText();
+renderTrophyBar();
+setTimeout(() => {
+    if (typeof initBackgroundCanvas === "function") {
+        initBackgroundCanvas(window.currentElementTheme.id);
+    }
+}, 200);
+
+// ── Event listeners ───────────────────────────────────────────────────────────
 document.getElementById("btn-start").addEventListener("click", () => {
     window.scrollTo(0, 0);
     const tutorialScreen = document.getElementById("tutorial-screen");
@@ -230,7 +346,6 @@ if (mapSelectBtn && mapSelectScreen) {
         mapSelectScreen.style.display = "flex";
     });
 }
-
 if (closeMapSelectBtn && mapSelectScreen) {
     closeMapSelectBtn.addEventListener("click", () => {
         mapSelectScreen.style.display = "none";
@@ -240,15 +355,39 @@ if (closeMapSelectBtn && mapSelectScreen) {
     });
 }
 
-document.querySelectorAll(".element-choice").forEach((button) => {
+document.querySelectorAll(".element-choice").forEach(button => {
     button.addEventListener("click", () => {
         const mapId = button.dataset.map;
-        if (!ELEMENT_THEMES.some((theme) => theme.id === mapId)) return;
+        if (!ELEMENT_THEMES.some(t => t.id === mapId)) return;
         sessionStorage.setItem("kosaraju-skip-intro", "1");
         localStorage.setItem("kosaraju-forced-element", mapId);
         location.reload();
     });
 });
+
+// Reset trophies button
+const resetBtn = document.getElementById("reset-trophies-btn");
+if (resetBtn) {
+    resetBtn.addEventListener("click", () => {
+        if (confirm("Xóa toàn bộ chiến tích?")) {
+            localStorage.removeItem("kosaraju-trophies");
+            window.trophyState = {};
+            renderTrophyBar();
+        }
+    });
+}
+
+// Ultimate win close
+const uwClose = document.getElementById("ultimate-win-close");
+if (uwClose) {
+    uwClose.addEventListener("click", () => {
+        if (!confirm("Bạn có chắc muốn bắt đầu lại? Toàn bộ chiến tích sẽ bị xóa!")) return;
+        document.getElementById("ultimate-win-screen").style.display = "none";
+        localStorage.removeItem("kosaraju-trophies");
+        window.trophyState = {};
+        renderTrophyBar();
+    });
+}
 
 if (shouldSkipIntro) {
     document.getElementById("tutorial-screen").style.display = "none";
