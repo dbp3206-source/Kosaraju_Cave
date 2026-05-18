@@ -152,7 +152,7 @@ function generateDungeonMap(numNodes = 16) {
 
 // ── Generic BFS reachability ──────────────────────────────────────────────────
 
-function canReachNode(fromId, toId, edges, undirected = false) {
+function canReachNode(fromId, toId, nodes, edges, undirected = false) {
     if (fromId === toId) return true;
     const queue = [fromId];
     const visited = new Set([fromId]);
@@ -163,6 +163,13 @@ function canReachNode(fromId, toId, edges, undirected = false) {
         if (undirected) {
             neighbors = neighbors.concat(edges.filter(e => e.to === u).map(e => e.from));
         }
+        
+        // --- Magic Door Teleportation Logic ---
+        const nodeObj = nodes.find(n => n.id === u);
+        if (nodeObj && nodeObj.type === "magic_door" && nodeObj.linkedDoor !== undefined) {
+            neighbors.push(nodeObj.linkedDoor);
+        }
+
         for (const v of neighbors) {
             if (!visited.has(v)) { visited.add(v); queue.push(v); }
         }
@@ -172,15 +179,15 @@ function canReachNode(fromId, toId, edges, undirected = false) {
 
 // ── Legacy wrapper (kept for any external calls) ──────────────────────────────
 function canReachEntrance(startNodeId, undirected = false) {
-    return canReachNode(startNodeId, 0, levelData.edges, undirected);
+    return canReachNode(startNodeId, 0, levelData.nodes, levelData.edges, undirected);
 }
 
 // ── Map validation ────────────────────────────────────────────────────────────
 function isMapWinnable(nodes, edges) {
     // Full win path: entrance(0) → key(1) → treasure(3) → entrance(0)
-    return canReachNode(0, 1, edges, false) &&
-           canReachNode(1, 3, edges, false) &&
-           canReachNode(3, 0, edges, false);
+    return canReachNode(0, 1, nodes, edges, false) &&
+           canReachNode(1, 3, nodes, edges, false) &&
+           canReachNode(3, 0, nodes, edges, false);
 }
 
 function buildValidMap(numNodes = 16, maxAttempts = 20) {
@@ -204,22 +211,23 @@ let gameState = {
 function canCompleteGame(fromNodeId) {
     const undirected = gameState.visionMode;
     const edges = levelData.edges;
+    const nodes = levelData.nodes;
     const hasKey      = gameState.inventory["Master Key"];
     const hasTreasure = gameState.inventory["Treasure"];
 
     if (hasTreasure) {
         // Only need to reach entrance
-        return canReachNode(fromNodeId, 0, edges, undirected);
+        return canReachNode(fromNodeId, 0, nodes, edges, undirected);
     }
     if (hasKey) {
         // Need: current → treasure(3) → entrance(0)
-        if (!canReachNode(fromNodeId, 3, edges, undirected)) return false;
-        return canReachNode(3, 0, edges, undirected);
+        if (!canReachNode(fromNodeId, 3, nodes, edges, undirected)) return false;
+        return canReachNode(3, 0, nodes, edges, undirected);
     }
     // Need: current → key(1) → treasure(3) → entrance(0)
-    if (!canReachNode(fromNodeId, 1, edges, undirected)) return false;
-    if (!canReachNode(1, 3, edges, undirected)) return false;
-    return canReachNode(3, 0, edges, undirected);
+    if (!canReachNode(fromNodeId, 1, nodes, edges, undirected)) return false;
+    if (!canReachNode(1, 3, nodes, edges, undirected)) return false;
+    return canReachNode(3, 0, nodes, edges, undirected);
 }
 
 // ── Context-aware dead-end game over ─────────────────────────────────────────
@@ -228,16 +236,17 @@ function triggerDeadEndGameOver(fromNodeId) {
     const hasTreasure = gameState.inventory["Treasure"];
     const undirected  = gameState.visionMode;
     const edges       = levelData.edges;
+    const nodes       = levelData.nodes;
     let reason;
 
-    if (!canReachNode(fromNodeId, 0, edges, undirected)) {
-        reason = "C\u1eeda s\u1eadp l\u1ea1i... B\u1ea1n \u0111\u00e3 l\u1ea1c v\u00e0o nh\u00e1nh c\u1ee5t kh\u00f4ng l\u1ed1i tho\u00e1t. B\u1ecb k\u1eb9t v\u0129nh vi\u1ec5n!";
-    } else if (!hasTreasure && !hasKey && !canReachNode(fromNodeId, 1, edges, undirected)) {
-        reason = "\u270f\ufe0f \u0110\u01b0\u1eddng \u0111\u1ebfn Master Key \u0111\u00e3 b\u1ecb ch\u1eb7n v\u0129nh vi\u1ec5n. Kh\u00f4ng c\u00f2n c\u00e1ch n\u00e0o th\u1eafng t\u1eeb \u0111\u00e2y!";
-    } else if (!hasTreasure && hasKey && !canReachNode(fromNodeId, 3, edges, undirected)) {
-        reason = "\ud83d\udddd\ufe0f Ch\u00eca kh\u00f3a trong tay nh\u01b0ng \u0111\u01b0\u1eddng \u0111\u1ebfn Ancient Relic \u0111\u00e3 b\u1ecb ch\u1eb7n. H\u00e0nh tr\u00ecnh k\u1ebft th\u00fac!";
+    if (!canReachNode(fromNodeId, 0, nodes, edges, undirected)) {
+        reason = "Cửa sập lại... Bạn đã lạc vào nhánh cụt không lối thoát. Bị kẹt vĩnh viễn!";
+    } else if (!hasTreasure && !hasKey && !canReachNode(fromNodeId, 1, nodes, edges, undirected)) {
+        reason = "✏️ Đường đến Master Key đã bị chặn vĩnh viễn. Không còn cách nào thắng từ đây!";
+    } else if (!hasTreasure && hasKey && !canReachNode(fromNodeId, 3, nodes, edges, undirected)) {
+        reason = "🗝️ Chìa khóa trong tay nhưng đường đến Ancient Relic đã bị chặn. Hành trình kết thúc!";
     } else {
-        reason = "Kh\u00f4ng c\u00f2n \u0111\u01b0\u1eddng n\u00e0o d\u1eabn \u0111\u1ebfn chi\u1ebfn th\u1eafng. H\u00e0nh tr\u00ecnh k\u1ebft th\u00fac t\u1ea1i \u0111\u00e2y.";
+        reason = "Không còn đường nào dẫn đến chiến thắng. Hành trình kết thúc tại đây.";
     }
     triggerGameOver(reason);
 }

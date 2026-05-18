@@ -5,37 +5,37 @@ const ELEMENT_THEMES = [
     {
         id: "metal", name: "Kim", title: "Thiết Giáp Cổ Thành", primary: "#d8d9d4", secondary: "#ffd700",
         symbol: "⚙", edge: 0xffd700, reverseEdge: 0xaee7ff, safe: 0x9aa0a6, trap: 0x6f7781, item: 0xffd700,
-        story: "Năm 849 SCN, thuật sĩ Khải Nguyên đặt 23 bẫy cơ khí bằng thiên thạch sắt bên trong. Đội thám hiểm đầu tiên năm 1923 mất 4 trong 7 thành viên. Chưa ai lấy được Kim Ấn. Đến lượt Trần Minh Khải."
+        story: "Năm 849 SCN, thuật sĩ Khải Nguyên đặt vô số cạm bẫy cơ khí bên trong hầm mộ. Đội thám hiểm đầu tiên năm 1923 mất mạng gần hết. Chưa ai sống sót rời khỏi đây. Đã đến lúc một truyền kỳ mới bắt đầu."
     },
     {
         id: "wood", name: "Mộc", title: "Lâm Căn U Đạo", primary: "#72b66f", secondary: "#c48a42",
         symbol: "🌳", edge: 0xcfa45b, reverseEdge: 0x72d987, safe: 0x4e7c48, trap: 0x3f2e19, item: 0x72d987,
-        story: "Rễ cây sống xuyên qua toàn bộ mê cung — ước tính dài 840 m. Năm 1987, nhà khoa học Liên Xô ghi nhận rễ vẫn còn lớn 2 mm mỗi năm. Mộc Ấn nằm ở tầng sâu nhất, nơi ánh sáng chưa bao giờ chạm tới."
+        story: "Rừng sâu hoang vu đã nuốt chửng những kẻ xấu số lạc bước. Cây cối nơi đây dường như có sinh mệnh và hơi thở riêng. Bất cứ thứ gì đi vào đều trở thành phân bón cho đại ngàn. Mộc Ấn nằm ở tầng sâu nhất, nơi ánh sáng chưa bao giờ chạm tới."
     },
     {
         id: "water", name: "Thủy", title: "Băng Huyệt Hàn Cung", primary: "#9ee7ff", secondary: "#1aa4c8",
         symbol: "❄", edge: 0x9ee7ff, reverseEdge: 0xffffff, safe: 0x2f7289, trap: 0x1b3242, item: 0xbef4ff,
-        story: "Nhiệt độ trung bình trong hang: âm 8°C. Khải Nguyên dẫn nước từ 4 con sông tạo mê cung băng năm 847. Mỗi 100 năm, băng dày thêm 3 cm. Sau 1.177 năm — mọi con đường cũ đã biến mất."
+        story: "Hầm ngục băng giá sâu thẳm lạnh lẽo vô cùng. Băng giá tích tụ hàng ngàn năm đã che lấp mọi lối đi, biến nơi đây thành một mê cung tuyệt vọng."
     },
     {
         id: "fire", name: "Hỏa", title: "Hỏa Long Hắc Động", primary: "#ffbd66", secondary: "#8b0000",
         symbol: "🔥", edge: 0xffbd66, reverseEdge: 0xff5a3d, safe: 0x8b2f18, trap: 0xb10f0f, item: 0xffd166,
-        story: "Núi lửa ngầm duy trì nhiệt độ 847°C tại lõi hang — trùng với năm vương triều sụp đổ. Trần cao 14 m, đủ để một con rồng đứng thẳng. Hỏa Ấn là mảnh phong ấn nguy hiểm nhất trong năm."
+        story: "Hệ thống hang động rực lửa chứa dòng dung nham cuồn cuộn không bao giờ tắt. Khói độc và sức nóng khủng khiếp đủ để thiêu rụi bất cứ kẻ nào dám cả gan thách thức."
     },
     {
         id: "earth", name: "Thổ", title: "Huyền Thổ Mộ Đạo", primary: "#c49b62", secondary: "#5f432c",
         symbol: "⛰", edge: 0xc49b62, reverseEdge: 0xe0c085, safe: 0x6f5638, trap: 0x3b2b1f, item: 0xd5a76b,
-        story: "Xây trên nền nghĩa địa vương triều Hoa Lam. 847 quan tài đá được đặt làm vật cản. Radar năm 1999 phát hiện 23 tầng hầm chưa được khám phá. Thổ Ấn nằm ở tầng cuối cùng."
+        story: "Một mê cung nằm sâu dưới lòng đất, nơi bóng tối đè nát mọi sinh vật. Động đất liên miên khiến địa hình luôn dịch chuyển, chôn vùi vô số bí mật đen tối."
     }
 ];
 
 // Victory items per element — 5 mảnh Ngũ Hành Phong Ấn
 const VICTORY_ITEMS = {
-    metal: { name: "Kim Ấn Thiết Kiếm", icon: "victory_item_metal.png", desc: "Mảnh phong ấn hình lưỡi kiếm đúc từ thiên thạch rơi năm 831 SCN. Nặng 4,7 kg, dài 28 cm. Khắc 137 ký tự cổ ngữ Hoa Lam chưa ai dịch được ngoài Trần Minh Khải.", cssClass: "vitem-metal", color: "#ffd700" },
-    wood:  { name: "Mộc Ấn Căn Cổ",    icon: "victory_item_wood.png",  desc: "Rễ cây Thiên Tuế 2.000 năm tuổi hóa đá nhưng vẫn còn ấm khi chạm vào. Dài 41 cm, nặng 1,2 kg. Khải Nguyên nói: 'Nó vẫn đang sống.'", cssClass: "vitem-wood",  color: "#72d987" },
-    water: { name: "Thủy Ấn Băng Lệ",   icon: "victory_item_water.png", desc: "Viên đá băng từ đỉnh Hàn Cực Sơn — không tan sau 1.177 năm. Nhiệt độ bề mặt âm 3°C. Đường kính 18 cm. Khi Khải cầm lên, cả hang rung nhẹ.", cssClass: "vitem-water", color: "#9ee7ff" },
-    fire:  { name: "Hỏa Ấn Long Nha",   icon: "victory_item_fire.png",  desc: "Nanh rồng hỏa dài 33 cm, nhiệt độ lõi 847°C sau 12 thế kỷ. Bốc cháy liên tục mà không tiêu hao. Theo sách cổ: nanh này từng xé toác bầu trời đêm năm 743 SCN.", cssClass: "vitem-fire",  color: "#ff4500" },
-    earth: { name: "Thổ Ấn Huyền Thạch", icon: "victory_item_earth.png", desc: "Khối đá huyền bí nặng 9,3 kg, màu đen tuyền, không phản chiếu ánh sáng. Theo Kosaraju Toàn Thư: 'Ai nâng được hòn đá này, trời đất sẽ run.' Khải đã nâng được.", cssClass: "vitem-earth", color: "#c49b62" }
+    metal: { name: "Kim Ấn Thiết Kiếm", icon: "victory_item_metal.png", desc: "Mảnh phong ấn đúc từ thiên thạch, tỏa ra sát khí ngút trời. Vật phẩm cứng cáp vô song.", cssClass: "vitem-metal", color: "#ffd700" },
+    wood:  { name: "Mộc Ấn Căn Cổ",    icon: "victory_item_wood.png",  desc: "Rễ cây Thiên Tuế ngàn năm hóa thạch. Mang trong mình sức sống mãnh liệt của đại ngàn, vẫn còn hơi ấm.", cssClass: "vitem-wood",  color: "#72d987" },
+    water: { name: "Thủy Ấn Băng Lệ",   icon: "victory_item_water.png", desc: "Viên đá băng từ đỉnh Hàn Cực Sơn, vĩnh viễn không tan chảy. Tỏa ra luồng khí lạnh thấu xương.", cssClass: "vitem-water", color: "#9ee7ff" },
+    fire:  { name: "Hỏa Ấn Long Nha",   icon: "victory_item_fire.png",  desc: "Nanh rồng lửa cổ đại, bốc cháy rực rỡ mà không hề thiêu rụi vạn vật xung quanh.", cssClass: "vitem-fire",  color: "#ff4500" },
+    earth: { name: "Thổ Ấn Huyền Thạch", icon: "victory_item_earth.png", desc: "Khối đá huyền bí mang đậm sức mạnh của Đất Mẹ. Tương truyền ai nắm được sẽ làm rung chuyển trời đất.", cssClass: "vitem-earth", color: "#c49b62" }
 };
 
 // ── Theme selection ───────────────────────────────────────────────────────────
@@ -97,13 +97,13 @@ function triggerUltimateWin() {
         // Step 1: Dragon transform animation
         if (typeof triggerDragonTransform === "function") {
             triggerDragonTransform(fwCanvas, () => {
-                // Step 2: After dragon, run fireworks
+                // Step 2: After dragon, run fireworks & looping dragon in background
                 if (typeof triggerUltimateFireworks === "function") {
-                    triggerUltimateFireworks(fwCanvas, 6000);
+                    triggerUltimateFireworks(fwCanvas, 9999999);
                 }
             });
         } else if (typeof triggerUltimateFireworks === "function") {
-            triggerUltimateFireworks(fwCanvas, 6000);
+            triggerUltimateFireworks(fwCanvas, 9999999);
         }
     }
 }
@@ -260,7 +260,7 @@ function updateUI() {
             : `<span class="slot-icon">⬟</span> Shield: <span class="locked-text">Không có</span>`);
 
     if (gameState.hp <= 0 && !gameState.isDead) {
-        triggerGameOver("Trần Minh Khải gục xuống. Máu loang trên nền đá cổ. Hành trình 1.177 năm chờ đợi kết thúc tại đây.");
+        triggerGameOver("Nhà thám hiểm gục xuống. Máu loang trên nền đá cổ. Hành trình kết thúc tại đây.");
     }
 }
 
@@ -401,7 +401,7 @@ if (uwClose) {
 
 if (shouldSkipIntro) {
     document.getElementById("tutorial-screen").style.display = "none";
-    addLog("Trần Minh Khải bước vào. Cánh đá khép lại phía sau — không có đường rút.", "log-system");
+    addLog("Cánh cửa đá khép lại phía sau — không còn đường lui.", "log-system");
 }
 
 // -- Algorithm Pop-up Logic --

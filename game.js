@@ -91,7 +91,7 @@ class GameScene extends Phaser.Scene {
                 gameState.visionMode = !gameState.visionMode;
                 addLog(
                     gameState.visionMode
-                        ? "⚡ Khải giở Kosaraju Toàn Thư — Trận pháp giải mã! Đồ thị hóa VÔ HƯỚNG, mọi hướng đều đi được!"
+                        ? "⚡ Bạn giở Cuốn Sách Bí Ẩn — Trận pháp giải mã! Kích hoạt Tầm Nhìn, mọi hướng đều đi được!"
                         : "📜 Đóng Toàn Thư. Trận pháp phục hồi — chỉ đi xuôi theo mũi tên.",
                     "log-system"
                 );
@@ -323,7 +323,7 @@ class GameScene extends Phaser.Scene {
             const destId = node.linkedDoor;
             const destNode = levelData.nodes.find(n => n.id === destId);
             if (destNode) {
-                addLog("✨ Cổng Chên Không! Một cơ chế trong trận pháp Kosaraju — Khải bị hút sang buồng khác...", "log-system");
+                addLog("✨ Cổng Không Gian! Một ma pháp dịch chuyển — Bạn bị hút sang khu vực khác...", "log-system");
                 gameState.isMoving = true; // lock input during warp
                 triggerWarpVFX(() => {
                     gameState.currentNode = destNode.id;
@@ -361,7 +361,7 @@ class GameScene extends Phaser.Scene {
                 triggerTrapEffect(node.label);
             } else {
                 gameState.hp -= node.damage;
-                addLog(`⚠️ Bẫy! ${node.label} của trận pháp Kosaraju gây ${node.damage} sát thương!`, "log-danger");
+                addLog(`⚠️ Bẫy! ${node.label} gây ${node.damage} sát thương!`, "log-danger");
                 this.cameras.main.shake(250, 0.02);
                 triggerTrapEffect(node.label);
                 // Floating damage text
@@ -393,7 +393,7 @@ class GameScene extends Phaser.Scene {
 
         } else if (node.type === "item") {
             gameState.inventory[node.item] = true;
-            addLog(`📜 Khải tìm thấy Kosaraju Toàn Thư — cuốn sách 1.200 năm tuổi! Bấm V để giải mã trận pháp.`, "log-success");
+            addLog(`📜 Bạn tìm thấy Cuốn Sách Bí Ẩn — cổ vật chứa sức mạnh ma pháp! Bấm V để kích hoạt Tầm Nhìn.`, "log-success");
             node.type = "safe";
             this.setNodeToSafe(node.id);
             triggerPickupVFX("crystal");

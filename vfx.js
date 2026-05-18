@@ -387,7 +387,7 @@ function triggerVictoryCanvasVFX(elementId, canvas, onComplete) {
     requestAnimationFrame(frame);
 }
 
-// ── Ultimate Win: rainbow fireworks ──────────────────────────────────────────
+// ── Ultimate Win: rainbow fireworks & looping dragon ───────────────────────────
 function triggerUltimateFireworks(canvas, duration = 5000) {
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
@@ -408,6 +408,11 @@ function triggerUltimateFireworks(canvas, duration = 5000) {
         }
     }
 
+    // Dragon looping setup
+    const dragonImg = new Image();
+    dragonImg.src = "victory_dragon.png";
+    let dragonFlyProgress = -0.2;
+
     let startTime = null; let lastSpawn = -999;
     function frame(ts) {
         if (!startTime) startTime = ts;
@@ -426,6 +431,37 @@ function triggerUltimateFireworks(canvas, duration = 5000) {
             ctx.shadowBlur = 0;
             f.x+=f.vx; f.y+=f.vy; f.vy+=0.1; f.life-=f.decay;
         });
+
+        // Draw background looping dragon
+        if (dragonImg.complete) {
+            dragonFlyProgress += 0.0035; // speed of flight
+            if (dragonFlyProgress > 1.3) {
+                dragonFlyProgress = -0.3; // Loop interval
+            }
+            if (dragonFlyProgress >= 0 && dragonFlyProgress <= 1) {
+                // Fly from bottom-left to top-right
+                const startX = -300, startY = canvas.height + 300;
+                const endX = canvas.width + 300, endY = -100;
+                
+                const currentX = startX + (endX - startX) * dragonFlyProgress;
+                const currentY = startY + (endY - startY) * dragonFlyProgress;
+                
+                ctx.save();
+                // Alpha fade in and out at edges
+                const dragonAlpha = Math.min(dragonFlyProgress / 0.1, 1) * (dragonFlyProgress > 0.9 ? (1 - dragonFlyProgress) / 0.1 : 1);
+                ctx.globalAlpha = dragonAlpha * 0.8; // slightly transparent to stay in background
+                ctx.globalCompositeOperation = "screen";
+                
+                ctx.translate(currentX, currentY);
+                const angle = Math.atan2(endY - startY, endX - startX);
+                ctx.rotate(angle);
+                ctx.scale(1.5, 1.5);
+                
+                ctx.drawImage(dragonImg, -dragonImg.width/2, -dragonImg.height/2);
+                ctx.restore();
+            }
+        }
+
         ctx.globalAlpha = 1;
         requestAnimationFrame(frame);
     }
