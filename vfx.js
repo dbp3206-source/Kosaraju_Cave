@@ -387,13 +387,14 @@ function triggerVictoryCanvasVFX(elementId, canvas, onComplete) {
     requestAnimationFrame(frame);
 }
 
-// ── Ultimate Win: rainbow fireworks & looping dragon ───────────────────────────
-function triggerUltimateFireworks(canvas, duration = 5000) {
+// ── Ultimate Win: rainbow fireworks & mystical ascension aura ───────────────────────────
+function triggerUltimateFireworks(canvas, duration = 9999999) {
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth; canvas.height = window.innerHeight;
     canvas.style.display = "block";
 
     const fireworks = [];
+    const auraParticles = [];
     const colors = ["#ff4136","#ff851b","#ffdc00","#2ecc40","#0074d9","#b10dc9","#ff69b4","#ffffff"];
 
     function spawnFirework() {
@@ -408,10 +409,19 @@ function triggerUltimateFireworks(canvas, duration = 5000) {
         }
     }
 
-    // Dragon looping setup
-    const dragonImg = new Image();
-    dragonImg.src = "victory_dragon.png";
-    let dragonFlyProgress = -0.2;
+    // Initialize mystical aura
+    for(let i=0; i<120; i++) {
+        auraParticles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            r: Math.random() * 3 + 1,
+            speedY: -Math.random() * 2.5 - 0.5,
+            speedX: Math.random() * 2 - 1,
+            hue: Math.random() * 40 + 30, // Golden aura hues
+            alpha: Math.random(),
+            pulseRate: Math.random() * 0.05 + 0.01
+        });
+    }
 
     let startTime = null; let lastSpawn = -999;
     function frame(ts) {
@@ -423,6 +433,31 @@ function triggerUltimateFireworks(canvas, duration = 5000) {
         ctx.fillStyle = "rgba(0,0,0,0.18)";
         ctx.fillRect(0,0,canvas.width,canvas.height);
 
+        // Draw mystical aura
+        ctx.globalCompositeOperation = "screen";
+        auraParticles.forEach(p => {
+            p.y += p.speedY;
+            p.x += p.speedX;
+            p.alpha += Math.sin(ts * p.pulseRate) * 0.02;
+            if (p.alpha > 1) p.alpha = 1;
+            if (p.alpha < 0.1) p.alpha = 0.1;
+
+            if (p.y < -20) p.y = canvas.height + 20;
+            if (p.x < -20) p.x = canvas.width + 20;
+            if (p.x > canvas.width + 20) p.x = -20;
+
+            ctx.globalAlpha = p.alpha;
+            ctx.fillStyle = `hsl(${p.hue}, 100%, 65%)`;
+            ctx.shadowColor = ctx.fillStyle;
+            ctx.shadowBlur = 10;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        });
+
+        // Draw fireworks
+        ctx.globalCompositeOperation = "source-over";
         fireworks.forEach(f => {
             if (f.life <= 0) return;
             ctx.globalAlpha = f.life;
@@ -432,43 +467,13 @@ function triggerUltimateFireworks(canvas, duration = 5000) {
             f.x+=f.vx; f.y+=f.vy; f.vy+=0.1; f.life-=f.decay;
         });
 
-        // Draw background looping dragon
-        if (dragonImg.complete) {
-            dragonFlyProgress += 0.0035; // speed of flight
-            if (dragonFlyProgress > 1.3) {
-                dragonFlyProgress = -0.3; // Loop interval
-            }
-            if (dragonFlyProgress >= 0 && dragonFlyProgress <= 1) {
-                // Fly from bottom-left to top-right
-                const startX = -300, startY = canvas.height + 300;
-                const endX = canvas.width + 300, endY = -100;
-                
-                const currentX = startX + (endX - startX) * dragonFlyProgress;
-                const currentY = startY + (endY - startY) * dragonFlyProgress;
-                
-                ctx.save();
-                // Alpha fade in and out at edges
-                const dragonAlpha = Math.min(dragonFlyProgress / 0.1, 1) * (dragonFlyProgress > 0.9 ? (1 - dragonFlyProgress) / 0.1 : 1);
-                ctx.globalAlpha = dragonAlpha * 0.8; // slightly transparent to stay in background
-                ctx.globalCompositeOperation = "screen";
-                
-                ctx.translate(currentX, currentY);
-                const angle = Math.atan2(endY - startY, endX - startX);
-                ctx.rotate(angle);
-                ctx.scale(1.5, 1.5);
-                
-                ctx.drawImage(dragonImg, -dragonImg.width/2, -dragonImg.height/2);
-                ctx.restore();
-            }
-        }
-
         ctx.globalAlpha = 1;
         requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
 }
 
-// ── Dragon Transform: 5-trophy ultimate ending ───────────────────────────────
+// ── Ascension Transform: 5-trophy ultimate ending ───────────────────────────────
 function triggerDragonTransform(canvas, onComplete) {
     const ctx = canvas.getContext("2d");
     canvas.width = window.innerWidth;
@@ -478,10 +483,6 @@ function triggerDragonTransform(canvas, onComplete) {
     const cx = canvas.width / 2, cy = canvas.height / 2;
     const TOTAL_DURATION = 4200;
     let startTime = null;
-
-    // Load Dragon Image
-    const dragonImg = new Image();
-    dragonImg.src = "victory_dragon.png";
 
     // Rune symbols orbiting the center
     const RUNES = ["☯","✦","⚡","◈","✧","⎊","⟁","✺"];
@@ -493,20 +494,17 @@ function triggerDragonTransform(canvas, onComplete) {
         speed: 0.022 + (i % 3) * 0.008
     }));
 
-    // Fire breath particles from dragon mouth
-    const flames = Array.from({length: 120}, () => ({
-        x: cx, y: cy,
-        vx: (Math.random() - 0.5) * 12,
-        vy: 4 + Math.random() * 10,
-        r: 6 + Math.random() * 12,
-        life: 1,
-        decay: 0.016 + Math.random() * 0.02,
-        color: ["#ff4500","#ff6a00","#ffbd66","#ff2200","#fff200"][Math.floor(Math.random() * 5)]
+    // Energy particles shooting UPWARDS
+    const energyParticles = Array.from({length: 150}, () => ({
+        x: cx + (Math.random() - 0.5) * 120, 
+        y: canvas.height + 100,
+        vx: (Math.random() - 0.5) * 6,
+        vy: -(15 + Math.random() * 20),
+        r: 3 + Math.random() * 8,
+        life: 0,
+        decay: 0.01 + Math.random() * 0.02,
+        color: ["#ffffff","#fff200","#ffbd66","#00ffff","#ffd700"][Math.floor(Math.random() * 5)]
     }));
-
-    // Flight path configuration
-    const startX = -200, startY = canvas.height + 200;
-    const endX = canvas.width + 200, endY = -100;
 
     function frame(ts) {
         if (!startTime) startTime = ts;
@@ -534,8 +532,8 @@ function triggerDragonTransform(canvas, onComplete) {
             ctx.arc(cx, cy, 160, 0, Math.PI * 2);
             ctx.stroke();
             // Inner ring
-            ctx.strokeStyle = "#ff4500";
-            ctx.shadowColor = "#ff4500";
+            ctx.strokeStyle = "#00ffff";
+            ctx.shadowColor = "#00ffff";
             ctx.beginPath();
             ctx.arc(cx, cy, 110, 0, Math.PI * 2);
             ctx.stroke();
@@ -544,8 +542,8 @@ function triggerDragonTransform(canvas, onComplete) {
             // Hexagon
             ctx.save();
             ctx.globalAlpha = ringAlpha * 0.5;
-            ctx.strokeStyle = "#ce93d8";
-            ctx.shadowColor = "#ce93d8";
+            ctx.strokeStyle = "#ffffff";
+            ctx.shadowColor = "#ffffff";
             ctx.shadowBlur = 16;
             ctx.lineWidth = 1.5;
             ctx.beginPath();
@@ -568,10 +566,10 @@ function triggerDragonTransform(canvas, onComplete) {
                 const ry = cy + r.orbitR * Math.sin(r.angle);
                 ctx.save();
                 ctx.globalAlpha = runeAlpha * 0.9;
-                ctx.font = "bold 18px Georgia";
-                ctx.fillStyle = "#ffd700";
-                ctx.shadowColor = "#ff8800";
-                ctx.shadowBlur = 14;
+                ctx.font = "bold 20px Arial";
+                ctx.fillStyle = "#00ffff";
+                ctx.shadowColor = "#00ffff";
+                ctx.shadowBlur = 15;
                 ctx.textAlign = "center";
                 ctx.textBaseline = "middle";
                 ctx.fillText(r.symbol, rx, ry);
@@ -579,17 +577,17 @@ function triggerDragonTransform(canvas, onComplete) {
             });
         }
 
-        // Phase 2 (0.3–0.55): white-gold burst
+        // Phase 2 (0.3–0.65): massive energy burst
         if (t >= 0.3 && t < 0.65) {
             const burstProgress = (t - 0.3) / 0.35;
             const burstAlpha = burstProgress < 0.5
                 ? burstProgress / 0.5
                 : 1 - (burstProgress - 0.5) / 0.5;
-            const burstR = 20 + burstProgress * 420;
+            const burstR = 20 + burstProgress * 600;
             const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, burstR);
-            grad.addColorStop(0, `rgba(255,255,220,${burstAlpha * 0.9})`);
-            grad.addColorStop(0.3, `rgba(255,200,50,${burstAlpha * 0.5})`);
-            grad.addColorStop(0.7, `rgba(255,100,0,${burstAlpha * 0.15})`);
+            grad.addColorStop(0, `rgba(255,255,255,${burstAlpha * 0.9})`);
+            grad.addColorStop(0.2, `rgba(0,255,255,${burstAlpha * 0.7})`);
+            grad.addColorStop(0.6, `rgba(255,215,0,${burstAlpha * 0.3})`);
             grad.addColorStop(1, "rgba(0,0,0,0)");
             ctx.fillStyle = grad;
             ctx.beginPath();
@@ -597,64 +595,52 @@ function triggerDragonTransform(canvas, onComplete) {
             ctx.fill();
         }
 
-        // Current dragon position for trailing particles
-        let currentX = cx, currentY = cy;
-
-        // Phase 3 (0.45–1.0): DRAGON flies across
-        if (t >= 0.45 && dragonImg.complete) {
-            const flyProgress = (t - 0.45) / 0.55;
-            currentX = startX + (endX - startX) * flyProgress;
-            currentY = startY + (endY - startY) * flyProgress;
+        // Phase 3 (0.45–1.0): Pillar of Ascension shooting upwards
+        if (t >= 0.45) {
+            const pillarProgress = (t - 0.45) / 0.55;
+            const pillarAlpha = Math.min(pillarProgress / 0.1, 1) * (pillarProgress > 0.8 ? (1 - pillarProgress) / 0.2 : 1);
             
-            const dragonAlpha = Math.min(flyProgress / 0.1, 1) * (flyProgress > 0.9 ? (1 - flyProgress) / 0.1 : 1);
-
+            // Draw glowing pillar
             ctx.save();
             ctx.globalCompositeOperation = "screen";
-            ctx.globalAlpha = dragonAlpha;
-            ctx.translate(currentX, currentY);
+            ctx.globalAlpha = pillarAlpha;
+            const pillarWidth = 180 + Math.sin(elapsed * 0.02) * 20;
             
-            // Adjust angle to match flight path
-            const angle = Math.atan2(endY - startY, endX - startX);
-            ctx.rotate(angle);
+            const pGrad = ctx.createLinearGradient(cx - pillarWidth/2, 0, cx + pillarWidth/2, 0);
+            pGrad.addColorStop(0, "rgba(0,0,0,0)");
+            pGrad.addColorStop(0.3, "rgba(0,255,255,0.8)");
+            pGrad.addColorStop(0.5, "rgba(255,255,255,1)");
+            pGrad.addColorStop(0.7, "rgba(255,215,0,0.8)");
+            pGrad.addColorStop(1, "rgba(0,0,0,0)");
             
-            // Make dragon larger
-            const scale = 1.3;
-            ctx.scale(scale, scale);
-            
-            ctx.shadowColor = "#ff6a00";
-            ctx.shadowBlur = 40 + Math.sin(elapsed * 0.01) * 20;
-            
-            // Draw image centered
-            ctx.drawImage(dragonImg, -dragonImg.width/2, -dragonImg.height/2);
+            ctx.fillStyle = pGrad;
+            ctx.fillRect(cx - pillarWidth/2, 0, pillarWidth, canvas.height);
             ctx.restore();
-        }
 
-        // Phase 4 (0.55–1.0): Fire trail from dragon
-        if (t >= 0.55) {
-            const fireAlpha = Math.min((t - 0.55) / 0.1, 1) * (t > 0.93 ? (1 - t) / 0.07 : 1);
-            flames.forEach(f => {
-                if (f.life <= 0) {
-                    // Spawn behind the flying dragon
-                    f.x = currentX - 60 + (Math.random() - 0.5) * 40;
-                    f.y = currentY + 60 + (Math.random() - 0.5) * 40;
-                    f.vx = (Math.random() - 0.5) * 8 - 4; // drift back/down
-                    f.vy = 4 + Math.random() * 8;
-                    f.life = 0.7 + Math.random() * 0.3;
+            // Energy particles swirling up the pillar
+            energyParticles.forEach(p => {
+                if (p.life <= 0) {
+                    p.x = cx + (Math.random() - 0.5) * pillarWidth;
+                    p.y = canvas.height + Math.random() * 200;
+                    p.vx = Math.sin(p.y * 0.01 + elapsed * 0.005) * 8; // Swirling
+                    p.vy = -(15 + Math.random() * 20);
+                    p.life = 1;
                 }
                 ctx.globalCompositeOperation = "screen";
-                ctx.globalAlpha = f.life * fireAlpha;
-                ctx.fillStyle = f.color;
-                ctx.shadowColor = f.color;
-                ctx.shadowBlur = 16;
+                ctx.globalAlpha = p.life * pillarAlpha;
+                ctx.fillStyle = p.color;
+                ctx.shadowColor = p.color;
+                ctx.shadowBlur = 15;
                 ctx.beginPath();
-                ctx.arc(f.x, f.y, f.r * f.life, 0, Math.PI * 2);
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.shadowBlur = 0;
-                ctx.globalCompositeOperation = "source-over";
                 
-                f.x += f.vx; f.y += f.vy; f.life -= f.decay;
+                p.x += p.vx;
+                p.y += p.vy;
+                p.life -= p.decay;
             });
-            ctx.globalAlpha = 1;
+            ctx.globalCompositeOperation = "source-over";
         }
 
         // Bottom text fade in
@@ -671,7 +657,7 @@ function triggerDragonTransform(canvas, onComplete) {
             ctx.font = "18px 'Cinzel', Georgia, serif";
             ctx.fillStyle = "#fff3aa";
             ctx.shadowBlur = 10;
-            ctx.fillText("S\u1ee9c m\u1ea1nh c\u1ed5 x\u01b0a \u0111\u00e3 h\u1ee3p nh\u1ea5t.", cx, cy + 160);
+            ctx.fillText("Sức mạnh cổ xưa đã hợp nhất.", cx, cy + 160);
             ctx.restore();
         }
 
