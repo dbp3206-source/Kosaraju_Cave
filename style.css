@@ -2128,12 +2128,13 @@ body[data-element="wood"] h1::after {
 .ultimate-trophies img:nth-child(4) { animation-delay: -6s; }
 .ultimate-trophies img:nth-child(5) { animation-delay: -8s; }
 
-/* ── Dragon Icon — Ultimate Win Screen ── */
-.ultimate-dragon-icon {
-    font-size: 90px;
+/* ── Dragon Image — Ultimate Win Screen ── */
+.ultimate-dragon-image {
+    width: 280px;
+    height: 220px;
+    object-fit: contain;
     display: block;
-    margin: 0 auto 8px;
-    line-height: 1;
+    margin: 0 auto -20px;
     animation:
         dragonRise 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) both,
         dragonGlow 2.2s ease-in-out 1.4s infinite alternate;

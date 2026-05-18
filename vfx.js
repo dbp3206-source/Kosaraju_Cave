@@ -443,6 +443,10 @@ function triggerDragonTransform(canvas, onComplete) {
     const TOTAL_DURATION = 4200;
     let startTime = null;
 
+    // Load Dragon Image
+    const dragonImg = new Image();
+    dragonImg.src = "victory_dragon.png";
+
     // Rune symbols orbiting the center
     const RUNES = ["☯","✦","⚡","◈","✧","⎊","⟁","✺"];
     const runeCount = 12;
@@ -455,14 +459,18 @@ function triggerDragonTransform(canvas, onComplete) {
 
     // Fire breath particles from dragon mouth
     const flames = Array.from({length: 120}, () => ({
-        x: cx + 40, y: cy - 10,
-        vx: 4 + Math.random() * 10,
-        vy: (Math.random() - 0.5) * 5,
+        x: cx, y: cy,
+        vx: (Math.random() - 0.5) * 12,
+        vy: 4 + Math.random() * 10,
         r: 6 + Math.random() * 12,
         life: 1,
         decay: 0.016 + Math.random() * 0.02,
         color: ["#ff4500","#ff6a00","#ffbd66","#ff2200","#fff200"][Math.floor(Math.random() * 5)]
     }));
+
+    // Flight path configuration
+    const startX = -200, startY = canvas.height + 200;
+    const endX = canvas.width + 200, endY = -100;
 
     function frame(ts) {
         if (!startTime) startTime = ts;
@@ -553,43 +561,51 @@ function triggerDragonTransform(canvas, onComplete) {
             ctx.fill();
         }
 
-        // Phase 3 (0.5–1.0): DRAGON appears
-        if (t >= 0.5) {
-            const dragonProgress = (t - 0.5) / 0.5;
-            const scaleVal = dragonProgress < 0.35
-                ? 0.1 + (dragonProgress / 0.35) * 1.15
-                : dragonProgress < 0.55
-                    ? 1.25 - ((dragonProgress - 0.35) / 0.2) * 0.25
-                    : 1.0;
-            const dragonAlpha = Math.min(dragonProgress / 0.2, 1);
+        // Current dragon position for trailing particles
+        let currentX = cx, currentY = cy;
+
+        // Phase 3 (0.45–1.0): DRAGON flies across
+        if (t >= 0.45 && dragonImg.complete) {
+            const flyProgress = (t - 0.45) / 0.55;
+            currentX = startX + (endX - startX) * flyProgress;
+            currentY = startY + (endY - startY) * flyProgress;
+            
+            const dragonAlpha = Math.min(flyProgress / 0.1, 1) * (flyProgress > 0.9 ? (1 - flyProgress) / 0.1 : 1);
 
             ctx.save();
+            ctx.globalCompositeOperation = "screen";
             ctx.globalAlpha = dragonAlpha;
-            ctx.translate(cx, cy - 30);
-            ctx.scale(scaleVal, scaleVal);
-            ctx.font = "160px serif";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            // Layered glow
-            ctx.shadowColor = "#ff4500";
-            ctx.shadowBlur = 60 + Math.sin(elapsed * 0.005) * 20;
-            ctx.fillText("🐉", 0, 0);
-            ctx.shadowColor = "#ffd700";
-            ctx.shadowBlur = 30 + Math.sin(elapsed * 0.007) * 10;
-            ctx.fillText("🐉", 0, 0);
+            ctx.translate(currentX, currentY);
+            
+            // Adjust angle to match flight path
+            const angle = Math.atan2(endY - startY, endX - startX);
+            ctx.rotate(angle);
+            
+            // Make dragon larger
+            const scale = 1.3;
+            ctx.scale(scale, scale);
+            
+            ctx.shadowColor = "#ff6a00";
+            ctx.shadowBlur = 40 + Math.sin(elapsed * 0.01) * 20;
+            
+            // Draw image centered
+            ctx.drawImage(dragonImg, -dragonImg.width/2, -dragonImg.height/2);
             ctx.restore();
         }
 
-        // Phase 4 (0.72–1.0): Fire breath particles
-        if (t >= 0.72) {
-            const fireAlpha = Math.min((t - 0.72) / 0.1, 1) * (t > 0.93 ? (1 - t) / 0.07 : 1);
+        // Phase 4 (0.55–1.0): Fire trail from dragon
+        if (t >= 0.55) {
+            const fireAlpha = Math.min((t - 0.55) / 0.1, 1) * (t > 0.93 ? (1 - t) / 0.07 : 1);
             flames.forEach(f => {
                 if (f.life <= 0) {
-                    f.x = cx + 40; f.y = cy - 10;
-                    f.vx = 4 + Math.random() * 10;
-                    f.vy = (Math.random() - 0.5) * 5;
+                    // Spawn behind the flying dragon
+                    f.x = currentX - 60 + (Math.random() - 0.5) * 40;
+                    f.y = currentY + 60 + (Math.random() - 0.5) * 40;
+                    f.vx = (Math.random() - 0.5) * 8 - 4; // drift back/down
+                    f.vy = 4 + Math.random() * 8;
                     f.life = 0.7 + Math.random() * 0.3;
                 }
+                ctx.globalCompositeOperation = "screen";
                 ctx.globalAlpha = f.life * fireAlpha;
                 ctx.fillStyle = f.color;
                 ctx.shadowColor = f.color;
@@ -598,27 +614,28 @@ function triggerDragonTransform(canvas, onComplete) {
                 ctx.arc(f.x, f.y, f.r * f.life, 0, Math.PI * 2);
                 ctx.fill();
                 ctx.shadowBlur = 0;
+                ctx.globalCompositeOperation = "source-over";
+                
                 f.x += f.vx; f.y += f.vy; f.life -= f.decay;
-                f.vy += 0.08;
             });
             ctx.globalAlpha = 1;
         }
 
-        // Bottom text "THIÊN LONG GIÁC NGỘ" fade in at t > 0.6
+        // Bottom text fade in
         if (t > 0.6) {
             const textAlpha = Math.min((t - 0.6) / 0.15, 1) * (t > 0.9 ? (1 - t) / 0.1 : 1);
             ctx.save();
             ctx.globalAlpha = textAlpha;
-            ctx.font = "bold 28px 'Cinzel', Georgia, serif";
+            ctx.font = "bold 32px 'Cinzel', Georgia, serif";
             ctx.textAlign = "center";
             ctx.fillStyle = "#ffd700";
             ctx.shadowColor = "#ff6600";
             ctx.shadowBlur = 20;
-            ctx.fillText("THIÊN LONG GIÁC NGỘ", cx, cy + 140);
-            ctx.font = "16px 'Cinzel', Georgia, serif";
+            ctx.fillText("THẾ THẦN HÓA RỒNG", cx, cy + 120);
+            ctx.font = "18px 'Cinzel', Georgia, serif";
             ctx.fillStyle = "#fff3aa";
             ctx.shadowBlur = 10;
-            ctx.fillText("Ng\u0169 H\u00e0nh \u0111\u00e3 \u0111\u1ee7. S\u1ee9c m\u1ea1nh c\u1ed5 x\u01b0a th\u1ee9c t\u1ec9nh.", cx, cy + 175);
+            ctx.fillText("S\u1ee9c m\u1ea1nh c\u1ed5 x\u01b0a \u0111\u00e3 h\u1ee3p nh\u1ea5t.", cx, cy + 160);
             ctx.restore();
         }
 
