@@ -317,7 +317,7 @@ class GameScene extends Phaser.Scene {
                 triggerVictorySequence(window.currentElementTheme.id);
                 return;
             }
-            addLog("⚛️ Khải đứng tại cửa hang. Tay không. Chưa tìm được Phong Ấn — không thể rut lui!", "log-system");
+            addLog("⚛️ Bạn đang đứng tại cửa hang. Tay không. Chưa tìm được Phong Ấn — không thể lui bước!", "log-system");
 
         } else if (node.type === "magic_door") {
             const destId = node.linkedDoor;
@@ -330,7 +330,7 @@ class GameScene extends Phaser.Scene {
                     gameState.visitedNodes.add(destNode.id);
                     const destPos = this.getNodeScreenPosition(destNode);
                     this.playerMarker.setPosition(destPos.x, destPos.y - 2);
-                    addLog(`Khải xuất hiện tại: ${destNode.label} (Buồng ${destNode.id})`, "log-system");
+                    addLog(`Bạn xuất hiện tại: ${destNode.label} (Buồng ${destNode.id})`, "log-system");
                     gameState.isMoving = false;
                     updateUI();
                     if (gameState.hp > 0 && destNode.id !== 0 && !gameState.isDead) {
@@ -345,7 +345,7 @@ class GameScene extends Phaser.Scene {
         } else if (node.type === "treasure") {
             if (gameState.inventory["Master Key"]) {
                 gameState.inventory["Treasure"] = true;
-                addLog("🏺 Phong Ấn rung chuyển khi Khải chạm vào! Rương mở ra — mảnh Phong Ấn nằm trong tay. Mau thoát ra!", "log-success");
+                addLog("🏺 Phong Ấn rung chuyển khi bạn chạm vào! Rương mở ra — mảnh Phong Ấn nằm trong tay. Mau thoát ra!", "log-success");
                 node.type = "safe";
                 this.texts[`ico_${node.id}`].setText("");
                 this.cameras.main.flash(500, 203, 160, 82);

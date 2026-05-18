@@ -159,18 +159,25 @@ function canReachNode(fromId, toId, nodes, edges, undirected = false) {
     while (queue.length > 0) {
         const u = queue.shift();
         if (u === toId) return true;
-        let neighbors = edges.filter(e => e.from === u).map(e => e.to);
+        let rawNeighbors = edges.filter(e => e.from === u).map(e => e.to);
         if (undirected) {
-            neighbors = neighbors.concat(edges.filter(e => e.to === u).map(e => e.from));
+            rawNeighbors = rawNeighbors.concat(edges.filter(e => e.to === u).map(e => e.from));
         }
         
         // --- Magic Door Teleportation Logic ---
-        const nodeObj = nodes.find(n => n.id === u);
-        if (nodeObj && nodeObj.type === "magic_door" && nodeObj.linkedDoor !== undefined) {
-            neighbors.push(nodeObj.linkedDoor);
+        // Khi đi tới 1 node, nếu node đó là magic_door, người chơi bị dịch chuyển ngay tới linkedDoor.
+        // Do đó, đích đến thực sự là linkedDoor chứ không phải chính node đó.
+        let actualNeighbors = [];
+        for (const v of rawNeighbors) {
+            const nodeV = nodes.find(n => n.id === v);
+            if (nodeV && nodeV.type === "magic_door" && nodeV.linkedDoor !== undefined) {
+                actualNeighbors.push(nodeV.linkedDoor);
+            } else {
+                actualNeighbors.push(v);
+            }
         }
 
-        for (const v of neighbors) {
+        for (const v of actualNeighbors) {
             if (!visited.has(v)) { visited.add(v); queue.push(v); }
         }
     }
