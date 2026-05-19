@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kosaraju Caves — Ngũ Hành Bí Cảnh</title>
-    <meta name="description" content="Khám phá năm bí cảnh Ngũ Hành, vượt qua mê đồ đồ thị và chinh phục cổ vật thất truyền trong Kosaraju Caves.">
+    <title>Huyền Thoại Avatar - Mê Cung Kosaraju</title>
+    <meta name="description" content="Khám phá mê cung Kosaraju, tìm kiếm Cổ Vật Ngự Thuật và trở về Cổng Tinh Linh.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -23,11 +23,11 @@
 
     <div id="ui-layer">
         <header>
-            <h1 id="game-title" data-symbol="◆">KOSARAJU CAVES</h1>
-            <div class="controls">Khám phá: <span>Click Node</span> Ancient Vision: <span>Phím V</span></div>
+            <h1 id="game-title" data-symbol="◆">HUYỀN THOẠI AVATAR</h1>
+            <div class="controls">Khám phá: <span>Click Node</span> Trạng Thái Avatar: <span>Phím V</span></div>
             <!-- Trophy Bar -->
             <div id="trophy-bar-wrap">
-                <span class="trophy-bar-label">Kho Phong Ấn</span>
+                <span class="trophy-bar-label">Cổ Vật Ngự Thuật</span>
                 <div id="trophy-bar"></div>
                 <button id="reset-trophies-btn" title="Xóa chiến tích">↺</button>
             </div>
@@ -61,10 +61,10 @@
             <div class="panel">
                 <div class="panel-header">Túi Đồ &amp; Trang Bị</div>
                 <div class="grid-inventory">
-                    <div id="inv-vision" class="inventory-slot"><span class="slot-icon">◉</span> Toàn Thư: <span class="locked-text">Chưa khám phá</span></div>
-                    <div id="inv-key" class="inventory-slot"><span class="slot-icon">⨿</span> Khóa Cổ Đạo: <span class="locked-text">Chưa có</span></div>
-                    <div id="inv-shield" class="inventory-slot"><span class="slot-icon">⯟</span> Hộ Pháp: <span class="locked-text">Không có</span></div>
-                    <div id="inv-treasure" class="inventory-slot"><span class="slot-icon">⚱</span> Phong Ấn: <span class="locked-text">Chưa tìm thấy</span></div>
+                    <div id="inv-vision" class="inventory-slot"><span class="slot-icon">◉</span> Mảnh Vỡ Linh Khí: <span class="locked-text">Chưa khám phá</span></div>
+                    <div id="inv-key" class="inventory-slot"><span class="slot-icon">⨿</span> Khóa Raava: <span class="locked-text">Chưa có</span></div>
+                    <div id="inv-shield" class="inventory-slot"><span class="slot-icon">⯟</span> Khiên Chấn Động: <span class="locked-text">Không có</span></div>
+                    <div id="inv-treasure" class="inventory-slot"><span class="slot-icon">⚱</span> Cổ Vật Ngự Thuật: <span class="locked-text">Chưa tìm thấy</span></div>
                 </div>
             </div>
 
@@ -78,7 +78,7 @@
     <!-- Tutorial / Intro screen -->
     <div id="tutorial-screen" class="overlay-screen" style="display: flex; flex-direction: row; gap: 24px; flex-wrap: wrap; justify-content: center; align-items: stretch;">
         <div class="overlay-box" style="margin: 0; width: min(600px, 100vw - 48px); display: flex; flex-direction: column;">
-            <span class="overlay-kicker" id="intro-theme-label">Ngũ Hành Phong Ấn</span>
+            <span class="overlay-kicker" id="intro-theme-label">Cổ Vật Ngự Thuật</span>
             <div class="intro-visual" aria-hidden="true">
                 <div class="intro-visual-ring"></div>
                 <div class="intro-visual-core">⚱</div>
@@ -88,14 +88,14 @@
                 <div class="intro-sigil intro-sigil-fire">🔥</div>
                 <div class="intro-sigil intro-sigil-earth">⛰</div>
             </div>
-            <h2>Ngũ Hành Phong Ấn</h2>
+            <h2>Huyền Thoại Avatar</h2>
             <p id="story-text" class="story-text">
-                <strong>Truyền thuyết kể lại rằng,</strong> một vương triều vĩ đại đã sụp đổ. Các thuật sĩ quyền năng đã phân chia sức mạnh vô song thành <strong>5 mảnh Ngũ Hành Phong Ấn</strong>, cất giấu sâu trong 5 hầm ngục và được bảo vệ bằng những trận pháp mê cung phức tạp chỉ đi được một chiều.<br><br>
-                <strong>Giờ đây.</strong> <strong>Bạn</strong> — một nhà thám hiểm vô danh, người duy nhất giải mã được bí mật của những hầm ngục. Bạn biết rằng: thu thập đủ 5 mảnh Phong Ấn sẽ giúp người sở hữu <strong>Hóa thân thành Thiên Long</strong> — hấp thụ sức mạnh cổ đại. Bạn một mình dấn thân vào nơi tăm tối.
+                <strong>🌍 Trước khi thế giới bị chia cắt,</strong> Linh Giới 🌌 từng được kết nối bằng những dòng chảy năng lượng bất tận 💫. Nhưng thực thể Kosaraju 👹 đã phong ấn sức mạnh ngũ hành ⚛️ vào siêu mê cung không gian 🌀. Năng lượng ở đây chỉ chảy theo một chiều ➡️ (đồ thị có hướng), khiến bất kỳ ai cũng dễ dàng bị lạc 🧭.<br><br>
+                <strong>🌪️ Bạn sẽ vào vai Avatar,</strong> người mang trọng trách khôi phục sự cân bằng ⚖️. Sử dụng linh thức 👁️ để quét qua các nhánh hang (DFS/BFS), mục tiêu của bạn là đoạt lại những Cổ Vật Ngự Thuật 🏺 thất truyền và an toàn quay trở về Cổng Tinh Linh ⛩️.
             </p>
             <p class="rule-text">
-                <b>Mục tiêu:</b> tìm <b>Khóa Cổ Đạo</b>, mở <b>Rương Phong Ấn</b> và thoát ra <b>cửa hang</b> còn sống.<br>
-                <b>Luật trận pháp:</b> chỉ đi xuôi theo mũi tên. Khi tìm được <b>Cuốn Sách Bí Ẩn</b>, bấm <b>V</b> để kích hoạt Tầm Nhìn — phá vỡ quy luật không gian, cho phép đi qua lại theo bất kỳ chiều nào.
+                <b>Mục tiêu:</b> tìm <b>Chìa Khóa Raava</b>, lấy <b>Cổ Vật Ngự Thuật</b> và thoát ra <b>Cổng Tinh Linh</b>.<br>
+                <b>Luật trận pháp:</b> chỉ đi xuôi theo mũi tên. Khi thu thập <b>Mảnh Vỡ Linh Khí</b>, bấm <b>V</b> để vào <b>Trạng Thái Avatar</b> — lật ngược dòng chảy năng lượng, cho phép đi lùi để thoát khỏi ngõ cụt.
             </p>
             <div style="display: flex; gap: 14px; margin-top: auto; justify-content: center; width: 100%;">
                 <button id="btn-show-algo" style="padding: 10px 16px; font-size: 1rem; cursor: pointer; border-radius: 4px; border: 1px solid #00bcd4; background: rgba(0, 188, 212, 0.1); color: #00bcd4; font-family: var(--font-title); font-weight: bold; transition: all 0.2s;">💡 Thuật Toán</button>
@@ -138,8 +138,8 @@
     <!-- Legacy win screen (kept for fallback, victory sequence replaces it) -->
     <div id="win-screen" class="overlay-screen">
         <div class="overlay-box">
-            <h2>THOÁT KHỎI HANG</h2>
-            <p class="center-large">Khám phá thành công! Bạn đã mang cổ vật thoát ra ngoài ánh sáng.</p>
+            <h2>TRỞ VỀ CỔNG TINH LINH</h2>
+            <p class="center-large">Khám phá thành công! Bạn đã mang Cổ Vật Ngự Thuật trở về an toàn.</p>
             <button onclick="closeWinScreen()">Xem Lại Map</button>
         </div>
     </div>
@@ -147,10 +147,10 @@
     <!-- Map Selection screen -->
     <div id="map-select-screen" class="overlay-screen map-select-screen">
         <div class="overlay-box map-select-box">
-            <span class="overlay-kicker">Ngũ Hành Phong Ấn</span>
-            <h2>Chọn Hang Động</h2>
+            <span class="overlay-kicker">Cổ Vật Ngự Thuật</span>
+            <h2>Chọn Mê Cung</h2>
             <div class="map-select-divider" aria-hidden="true"></div>
-            <p class="story-text">Mỗi ấn hiệu mở ra một hầm ngục ẩn giấu các thử thách khác nhau. Một Phong Ấn nằm ở cuối mỗi hầm ngục. Chọn hệ bạn muốn thám hiểm.</p>
+            <p class="story-text">Mê cung chia thành 5 khu vực đại diện cho các trường phái Ngự Thuật. Chọn hệ bạn muốn thám hiểm.</p>
             <div class="element-wheel" aria-label="Chọn hệ map">
                 <div class="element-wheel-ring"></div>
                 <button class="element-choice choice-metal" data-map="metal"><span>⚙</span><strong>Kim</strong></button>
@@ -159,7 +159,7 @@
                 <button class="element-choice choice-fire" data-map="fire"><span>🔥</span><strong>Hỏa</strong></button>
                 <button class="element-choice choice-earth" data-map="earth"><span>◆</span><strong>Thổ</strong></button>
                 <div class="wheel-core">
-                    <span class="wheel-core-label">KOSARAJU<br>CAVES</span>
+                    <span class="wheel-core-label">MÊ CUNG<br>KOSARAJU</span>
                 </div>
             </div>
             <div class="overlay-actions map-select-actions">
@@ -179,8 +179,8 @@
         <canvas id="fireworks-canvas" style="position:absolute;inset:0;pointer-events:none;z-index:0;"></canvas>
         <div class="ultimate-win-box">
             <div class="ultimate-holy-light" aria-hidden="true"></div>
-            <h2 class="ultimate-title">THẾ THẦN HÓA RỒNG</h2>
-            <p class="ultimate-subtitle">Bạn đã hấp thụ hoàn toàn sức mạnh của 5 mảnh Ngũ Hành Phong Ấn.<br>Thức tỉnh linh hồn cổ đại — <strong>Chính thức hóa thân thành Thiên Long vĩ đại!</strong></p>
+            <h2 class="ultimate-title">CÂN BẰNG THẾ GIỚI</h2>
+            <p class="ultimate-subtitle">Bạn đã thu thập đủ Cổ Vật Ngự Thuật thất truyền.<br>Khôi phục sự cân bằng và mang lại hòa bình cho tứ phương!</p>
             <div class="ultimate-trophies" id="ultimate-trophies-display">
                 <img src="victory_item_metal.png" title="Kim" class="ultimate-trophy-img">
                 <img src="victory_item_wood.png" title="Mộc" class="ultimate-trophy-img">

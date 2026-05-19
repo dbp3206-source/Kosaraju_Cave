@@ -91,8 +91,8 @@ class GameScene extends Phaser.Scene {
                 gameState.visionMode = !gameState.visionMode;
                 addLog(
                     gameState.visionMode
-                        ? "⚡ Bạn giở Cuốn Sách Bí Ẩn — Trận pháp giải mã! Kích hoạt Tầm Nhìn, mọi hướng đều đi được!"
-                        : "📜 Đóng Toàn Thư. Trận pháp phục hồi — chỉ đi xuôi theo mũi tên.",
+                        ? "⚡ Trạng Thái Avatar kích hoạt! Mọi hướng đều đi được, dòng chảy năng lượng bị lật ngược!"
+                        : "📜 Rời Trạng Thái Avatar. Trận pháp phục hồi — chỉ đi xuôi theo mũi tên.",
                     "log-system"
                 );
                 this.drawEdges();
@@ -291,7 +291,7 @@ class GameScene extends Phaser.Scene {
         if (!isValidPath) {
             const msg = gameState.visionMode
                 ? "Không có cạnh nối. Hai buồng hầm này không liên kết với nhau."
-                : "Đường hầm bị chặn! Trận pháp chỉ cho phép một chiều. Tìm Toàn Thư (V) để đi ngược.";
+                : "Đường hầm bị chặn! Năng lượng chỉ chảy một chiều. Tìm Mảnh Vỡ Linh Khí (V) để lật ngược dòng chảy.";
             addLog(msg, "log-danger");
             this.cameras.main.shake(150, 0.005);
             return;
@@ -317,7 +317,7 @@ class GameScene extends Phaser.Scene {
                 triggerVictorySequence(window.currentElementTheme.id);
                 return;
             }
-            addLog("⚛️ Bạn đang đứng tại cửa hang. Tay không. Chưa tìm được Phong Ấn — không thể lui bước!", "log-system");
+            addLog("⚛️ Bạn đang đứng tại Cổng Tinh Linh. Tay không. Chưa tìm được Cổ Vật Ngự Thuật — không thể lui bước!", "log-system");
 
         } else if (node.type === "magic_door") {
             const destId = node.linkedDoor;
@@ -345,18 +345,18 @@ class GameScene extends Phaser.Scene {
         } else if (node.type === "treasure") {
             if (gameState.inventory["Master Key"]) {
                 gameState.inventory["Treasure"] = true;
-                addLog("🏺 Phong Ấn rung chuyển khi bạn chạm vào! Rương mở ra — mảnh Phong Ấn nằm trong tay. Mau thoát ra!", "log-success");
+                addLog("🏺 Cổ Vật Ngự Thuật rung chuyển! Bạn đã đoạt lại bí kíp thất truyền. Mau trở về Cổng Tinh Linh!", "log-success");
                 node.type = "safe";
                 this.texts[`ico_${node.id}`].setText("");
                 this.cameras.main.flash(500, 203, 160, 82);
             } else {
-                addLog("🔒 Rương Phong Ấn bị khóa bằng cơ chế cổ xưa! Cần tìm Khóa Cổ Đạo trước.", "log-danger");
+                addLog("🔒 Nơi chứa Cổ Vật bị khóa bằng cơ chế cổ xưa! Cần tìm Chìa Khóa Raava trước.", "log-danger");
             }
 
         } else if (node.type === "trap") {
             if (gameState.inventory["Shield"]) {
                 gameState.inventory["Shield"] = false;
-                addLog(`🛡️ Dẫm phải bẫy ${node.label}, nhưng Hộ Pháp che đỡ và tan vỡ!`, "log-system");
+                addLog(`🛡️ Dẫm phải bẫy ${node.label}, nhưng Khiên Chấn Động che đỡ và tan vỡ!`, "log-system");
                 this.cameras.main.shake(150, 0.01);
                 triggerTrapEffect(node.label);
             } else {
@@ -370,7 +370,7 @@ class GameScene extends Phaser.Scene {
 
         } else if (node.type === "shield") {
             gameState.inventory["Shield"] = true;
-            addLog("🛡️ Khải tìm thấy Hộ Pháp của vệ binh cũ. Nó sẽ che chở một đòn bẫy bất kỳ.", "log-success");
+            addLog("🛡️ Bạn tìm thấy Khiên Chấn Động. Nó sẽ che chở một đòn bẫy bất kỳ.", "log-success");
             node.type = "safe";
             this.setNodeToSafe(node.id);
             triggerPickupVFX("shield");
@@ -378,7 +378,7 @@ class GameScene extends Phaser.Scene {
         } else if (node.type === "potion") {
             const heal = 25;
             gameState.hp = Math.min(gameState.maxHp, gameState.hp + heal);
-            addLog(`💉 Khải tìm thấy bình thuốc của đội thám hiểm 1923. Hồi ${heal} sinh lực.`, "log-success");
+            addLog(`💉 Bạn hấp thụ tinh hoa năng lượng. Hồi ${heal} sinh lực.`, "log-success");
             node.type = "safe";
             this.setNodeToSafe(node.id);
             triggerPickupVFX("heal");
@@ -386,20 +386,20 @@ class GameScene extends Phaser.Scene {
 
         } else if (node.type === "key") {
             gameState.inventory["Master Key"] = true;
-            addLog("🔑 Khải tìm thấy Khóa Cổ Đạo! Kim loại nguyên chất 1.177 năm không gỉ. Bây giờ hãy tìm Rương Phong Ấn.", "log-success");
+            addLog("🔑 Bạn tìm thấy Chìa Khóa Raava! Ánh sáng rực rỡ chiếu sáng cả một vùng. Bây giờ hãy tìm Cổ Vật Ngự Thuật.", "log-success");
             node.type = "safe";
             this.setNodeToSafe(node.id);
             triggerPickupVFX("key");
 
         } else if (node.type === "item") {
             gameState.inventory[node.item] = true;
-            addLog(`📜 Bạn tìm thấy Cuốn Sách Bí Ẩn — cổ vật chứa sức mạnh ma pháp! Bấm V để kích hoạt Tầm Nhìn.`, "log-success");
+            addLog(`📜 Bạn tìm thấy Mảnh Vỡ Linh Khí! Bấm V để vào Trạng Thái Avatar.`, "log-success");
             node.type = "safe";
             this.setNodeToSafe(node.id);
             triggerPickupVFX("crystal");
 
         } else {
-            addLog(`Khải tiến vào: ${node.label}`);
+            addLog(`Bạn tiến vào: ${node.label}`);
         }
 
         updateUI();

@@ -611,7 +611,11 @@ h1::after {
 }
 
 /* Thematic Backgrounds */
-
+body[data-element="metal"] .sidebar-crown { background-image: url('bg_metal.png'); }
+body[data-element="wood"] .sidebar-crown { background-image: url('bg_wood.png'); }
+body[data-element="water"] .sidebar-crown { background-image: url('bg_water.png'); }
+body[data-element="fire"] .sidebar-crown { background-image: url('bg_fire.png'); }
+body[data-element="earth"] .sidebar-crown { background-image: url('bg_earth.png'); }
 
 
 
@@ -1933,7 +1937,7 @@ body[data-element="wood"] h1::after {
 
 /* ── Trophy Bar ── */
 #trophy-bar-wrap {
-    position: absolute; right: 28px; top: 50%; transform: translateY(-50%);
+    position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
     z-index: 52; display: flex; align-items: center; gap: 10px;
     background: rgba(0,0,0,0.6); padding: 5px 15px;
     border-radius: 30px; border: 1px solid rgba(255,215,0,0.3);

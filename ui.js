@@ -3,29 +3,29 @@ let isLightMode = false;
 
 const ELEMENT_THEMES = [
     {
-        id: "metal", name: "Kim", title: "Thiết Giáp Cổ Thành", primary: "#d8d9d4", secondary: "#ffd700",
+        id: "metal", name: "Kim", title: "Thành Phố Kim Loại Zaofu", primary: "#d8d9d4", secondary: "#ffd700",
         symbol: "⚙", edge: 0xffd700, reverseEdge: 0xaee7ff, safe: 0x9aa0a6, trap: 0x6f7781, item: 0xffd700,
-        story: "Năm 849 SCN, thuật sĩ Khải Nguyên đặt vô số cạm bẫy cơ khí bên trong hầm mộ. Đội thám hiểm đầu tiên năm 1923 mất mạng gần hết. Chưa ai sống sót rời khỏi đây. Đã đến lúc một truyền kỳ mới bắt đầu."
+        story: "Chứa đầy những cỗ máy kim khí cổ xưa và bánh răng khổng lồ. Nếu bước sai nhịp, bạn sẽ bị những lưỡi đao kim loại sắc lẹm của Ngự Kim Sư lướt qua."
     },
     {
-        id: "wood", name: "Mộc", title: "Lâm Căn U Đạo", primary: "#72b66f", secondary: "#c48a42",
+        id: "wood", name: "Mộc", title: "Đầm Lầy Sương Mù", primary: "#72b66f", secondary: "#c48a42",
         symbol: "🌳", edge: 0xcfa45b, reverseEdge: 0x72d987, safe: 0x4e7c48, trap: 0x3f2e19, item: 0x72d987,
-        story: "Rừng sâu hoang vu đã nuốt chửng những kẻ xấu số lạc bước. Cây cối nơi đây dường như có sinh mệnh và hơi thở riêng. Bất cứ thứ gì đi vào đều trở thành phân bón cho đại ngàn. Mộc Ấn nằm ở tầng sâu nhất, nơi ánh sáng chưa bao giờ chạm tới."
+        story: "Rừng rậm tâm linh u ám, nơi rễ cây ma thuật phát triển chằng chịt. Cạm bẫy ở đây là những dây leo sống động sẵn sàng siết chặt và phong bế hoàn toàn tầm nhìn."
     },
     {
-        id: "water", name: "Thủy", title: "Băng Huyệt Hàn Cung", primary: "#9ee7ff", secondary: "#1aa4c8",
+        id: "water", name: "Thủy", title: "Hầm Băng Bắc Thủy Tộc", primary: "#9ee7ff", secondary: "#1aa4c8",
         symbol: "❄", edge: 0x9ee7ff, reverseEdge: 0xffffff, safe: 0x2f7289, trap: 0x1b3242, item: 0xbef4ff,
-        story: "Hầm ngục băng giá sâu thẳm lạnh lẽo vô cùng. Băng giá tích tụ hàng ngàn năm đã che lấp mọi lối đi, biến nơi đây thành một mê cung tuyệt vọng."
+        story: "Những hang động pha lê băng giá lạnh buốt. Một bước đi sai sẽ kích hoạt bẫy nước, lập tức đóng băng toàn bộ màn hình khiến bạn mất phương hướng."
     },
     {
-        id: "fire", name: "Hỏa", title: "Hỏa Long Hắc Động", primary: "#ffbd66", secondary: "#8b0000",
+        id: "fire", name: "Hỏa", title: "Ngục Tối Hỏa Quốc", primary: "#ffbd66", secondary: "#8b0000",
         symbol: "🔥", edge: 0xffbd66, reverseEdge: 0xff5a3d, safe: 0x8b2f18, trap: 0xb10f0f, item: 0xffd166,
-        story: "Hệ thống hang động rực lửa chứa dòng dung nham cuồn cuộn không bao giờ tắt. Khói độc và sức nóng khủng khiếp đủ để thiêu rụi bất cứ kẻ nào dám cả gan thách thức."
+        story: "Nơi dòng dung nham cuộn chảy dưới chân và không khí hừng hực sát khí. Bẫy lửa kích hoạt sẽ thiêu rụi mọi thứ trong tầm mắt bằng những ngọn lửa rực rỡ."
     },
     {
-        id: "earth", name: "Thổ", title: "Huyền Thổ Mộ Đạo", primary: "#c49b62", secondary: "#5f432c",
+        id: "earth", name: "Thổ", title: "Mộ Đạo Ba Sing Se", primary: "#c49b62", secondary: "#5f432c",
         symbol: "⛰", edge: 0xc49b62, reverseEdge: 0xe0c085, safe: 0x6f5638, trap: 0x3b2b1f, item: 0xd5a76b,
-        story: "Một mê cung nằm sâu dưới lòng đất, nơi bóng tối đè nát mọi sinh vật. Động đất liên miên khiến địa hình luôn dịch chuyển, chôn vùi vô số bí mật đen tối."
+        story: "Các đường hầm bí mật vỡ vụn dưới lòng đất Thổ Quốc. Năng lượng địa chấn chực chờ bùng nổ, làm rung chuyển và nứt toác mặt đất mỗi khi bạn đạp trúng bẫy."
     }
 ];
 
@@ -115,7 +115,7 @@ function applyThemeText() {
     if (gameTitle) gameTitle.dataset.symbol = theme.symbol;
     document.getElementById("map-theme-name").innerText = `Bí cảnh hệ ${theme.name}`;
     document.getElementById("map-theme-title").innerText = theme.title;
-    document.getElementById("intro-theme-label").innerText = `Ngũ Hành Phong Ấn — Hệ ${theme.name}`;
+    document.getElementById("intro-theme-label").innerText = `Cổ Vật Ngự Thuật — Hệ ${theme.name}`;
     const storyEl = document.getElementById("story-text");
     if (storyEl && theme.story) storyEl.innerText = theme.story;
 }
@@ -241,26 +241,26 @@ function updateUI() {
 
     setInventorySlot("inv-vision", gameState.inventory["Ancient Vision"],
         gameState.inventory["Ancient Vision"]
-            ? `<span class="slot-icon" style="color:#00bcd4">◉</span> Vision: <span class="highlight-text">Sẵn sàng (V)</span>`
-            : `<span class="slot-icon">◉</span> Vision: <span class="locked-text">Chưa mở</span>`);
+            ? `<span class="slot-icon" style="color:#00bcd4">◉</span> Mảnh Vỡ Linh Khí: <span class="highlight-text">Sẵn sàng (V)</span>`
+            : `<span class="slot-icon">◉</span> Mảnh Vỡ Linh Khí: <span class="locked-text">Chưa mở</span>`);
 
     setInventorySlot("inv-key", gameState.inventory["Master Key"],
         gameState.inventory["Master Key"]
-            ? `<span class="slot-icon" style="color:#ffd700">⚿</span> Master Key: <span class="highlight-text">Đã lấy</span>`
-            : `<span class="slot-icon">⚿</span> Master Key: <span class="locked-text">Chưa có</span>`);
+            ? `<span class="slot-icon" style="color:#ffd700">⚿</span> Khóa Raava: <span class="highlight-text">Đã lấy</span>`
+            : `<span class="slot-icon">⚿</span> Khóa Raava: <span class="locked-text">Chưa có</span>`);
 
     setInventorySlot("inv-treasure", gameState.inventory["Treasure"],
         gameState.inventory["Treasure"]
-            ? `<span class="slot-icon" style="color:#ff8f00">⚱</span> Relic: <span class="highlight-text">Đã lấy</span>`
-            : `<span class="slot-icon">⚱</span> Relic: <span class="locked-text">Chưa tìm thấy</span>`);
+            ? `<span class="slot-icon" style="color:#ff8f00">⚱</span> Cổ Vật Ngự Thuật: <span class="highlight-text">Đã lấy</span>`
+            : `<span class="slot-icon">⚱</span> Cổ Vật Ngự Thuật: <span class="locked-text">Chưa tìm thấy</span>`);
 
     setInventorySlot("inv-shield", gameState.inventory["Shield"],
         gameState.inventory["Shield"]
-            ? `<span class="slot-icon" style="color:#607d8b">⬟</span> Shield: <span class="highlight-text">Đang có</span>`
-            : `<span class="slot-icon">⬟</span> Shield: <span class="locked-text">Không có</span>`);
+            ? `<span class="slot-icon" style="color:#607d8b">⬟</span> Khiên Chấn Động: <span class="highlight-text">Đang có</span>`
+            : `<span class="slot-icon">⬟</span> Khiên Chấn Động: <span class="locked-text">Không có</span>`);
 
     if (gameState.hp <= 0 && !gameState.isDead) {
-        triggerGameOver("Nhà thám hiểm gục xuống. Máu loang trên nền đá cổ. Hành trình kết thúc tại đây.");
+        triggerGameOver("Avatar gục ngã. Hành trình khôi phục sự cân bằng kết thúc tại đây.");
     }
 }
 
@@ -379,7 +379,7 @@ document.querySelectorAll(".element-choice").forEach(button => {
 const resetBtn = document.getElementById("reset-trophies-btn");
 if (resetBtn) {
     resetBtn.addEventListener("click", () => {
-        if (confirm("Xóa toàn bộ Phong Ấn đã thu thập? Thiên Long Hồn sẽ tiếp tục bị phong ấn!")) {
+        if (confirm("Xóa toàn bộ Cổ Vật đã thu thập? Sự mất cân bằng sẽ tiếp tục!")) {
             localStorage.removeItem("kosaraju-trophies");
             window.trophyState = {};
             renderTrophyBar();
@@ -391,7 +391,7 @@ if (resetBtn) {
 const uwClose = document.getElementById("ultimate-win-close");
 if (uwClose) {
     uwClose.addEventListener("click", () => {
-        if (!confirm("Bắt đầu lại hành trình? 5 mảnh Phong Ấn đã thu thập sẽ mất — Thiên Long Hồn sẽ lại bị phong ấn thêm 1.177 năm nữa!")) return;
+        if (!confirm("Bắt đầu lại hành trình? 5 Cổ Vật đã thu thập sẽ mất!")) return;
         document.getElementById("ultimate-win-screen").style.display = "none";
         localStorage.removeItem("kosaraju-trophies");
         window.trophyState = {};
